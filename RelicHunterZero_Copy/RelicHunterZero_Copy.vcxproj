@@ -152,8 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="RelicHunterZero_Copy.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScreenManger.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
