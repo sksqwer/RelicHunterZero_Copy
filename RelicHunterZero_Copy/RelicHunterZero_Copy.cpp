@@ -14,7 +14,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름�
 
 //custom
 RECT rectview;
-GameManager GM;
+//GameManager GM;
 HWND g_hWnd = NULL;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
@@ -61,9 +61,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			GM.update();
+			GameManager::getInstance().update();
 			HDC hdc = GetDC(g_hWnd);
-			GM.show(g_hWnd, hdc);
+			GameManager::getInstance().show(g_hWnd, hdc);
 
 			ReleaseDC(g_hWnd, hdc);
 		}
@@ -161,7 +161,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 	{
 		GetClientRect(hWnd, &rectview);
-		GM.Init();
+		GameManager::getInstance().Init();
 	}
     case WM_COMMAND:
         {
@@ -187,14 +187,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
 
 //			GetClientRect(hWnd, &rectview);
-			GM.show(hWnd, hdc);
+			GameManager::getInstance().show(hWnd, hdc);
 
 
             EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
-		GM.ShutDown();
+		GameManager::getInstance().ShutDown();
         PostQuitMessage(0);
         break;
     default:

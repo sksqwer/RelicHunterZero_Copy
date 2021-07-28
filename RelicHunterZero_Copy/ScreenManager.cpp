@@ -1,3 +1,5 @@
+
+#include "framework.h"
 #include "ScreenManager.h"
 #include "GameManager.h"
 #include "FileSystem.h"
@@ -65,44 +67,52 @@ void ScreenManager::MainMenu(HWND hWnd, HDC hdc)
 
 	int toggle_x = -65, toggle_y = 500, toggle_y_interval = 150;
 	POINT pos = GameManager::getInstance().getmouse();
+	
 	pos.x += 500 - bg_tile_x;
 	pos.y += 500 - bg_tile_y;
 
-	if (!is_in_rectangle(toggle_x + 500 - bg_tile_x, toggle_y + 500 - bg_tile_y, toggle_x + 500 - bg_tile_x + 600, toggle_y + 500 - bg_tile_y + 60, pos))
+
+	if (!is_in_rectangle(toggle_x + 500 - bg_tile_x, toggle_y + 500 - bg_tile_y - 20, toggle_x + 500 - bg_tile_x + 600, toggle_y + 500 - bg_tile_y + 60 + 20, pos))
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x + 500 - bg_tile_x, toggle_y + 500 - bg_tile_y); // toggle 
-		DoubleBufferingtext(hWnd, hMemDC, _T("PLAY  ADVENTURE"), 50 + 500 - bg_tile_x, toggle_y + 10 + 500 - bg_tile_y, 580, 60); // text
+		DoubleBufferingtext(hWnd, hMemDC, _T("PLAY  ADVENTURE"), 50 + 500 - bg_tile_x, toggle_y + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 255, 255)); // text
 	}
 	else
 	{
-
+		DoubleBufferingimage(hWnd, hMemDC, img[4], toggle_x + 500 - bg_tile_x, toggle_y + 500 - bg_tile_y); // toggle 
+		DoubleBufferingtext(hWnd, hMemDC, _T("PLAY  ADVENTURE"), 50 + 500 - bg_tile_x, toggle_y + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 0, 0)); // text
 	}
-	if (!is_in_rectangle(toggle_x * 2 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 500 - bg_tile_y, toggle_x * 2 + 500 - bg_tile_x + 600, toggle_y + toggle_y_interval + 500 - bg_tile_y + 60, pos))
+
+	if (!is_in_rectangle(toggle_x * 2 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 500 - bg_tile_y - 20, toggle_x * 2 + 500 - bg_tile_x + 600, toggle_y + toggle_y_interval + 500 - bg_tile_y + 60 + 20, pos))
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x * 2 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 500 - bg_tile_y);
-		DoubleBufferingtext(hWnd, hMemDC, _T("MAP  EDIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 10 + 500 - bg_tile_y, 580, 60);
+		DoubleBufferingtext(hWnd, hMemDC, _T("MAP  EDIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 255, 255));
 	}
 	else
 	{
-
+		DoubleBufferingimage(hWnd, hMemDC, img[4], toggle_x * 2 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 500 - bg_tile_y);
+		DoubleBufferingtext(hWnd, hMemDC, _T("MAP  EDIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 0, 0));
 	}
-	if (!is_in_rectangle(toggle_x * 3 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y, toggle_x * 3 + 500 - bg_tile_x + 600, toggle_y * 2 + toggle_y_interval + 500 - bg_tile_y + 60, pos))
+
+	if (!is_in_rectangle(toggle_x * 3 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y - 20, toggle_x * 3 + 500 - bg_tile_x + 600, toggle_y+ toggle_y_interval * 2 + 500 - bg_tile_y + 60 + 20, pos))
 	{
-	DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x * 3 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y);
-	DoubleBufferingtext(hWnd, hMemDC, _T("SETTING"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 10+ 500 - bg_tile_y, 580, 60);
+		DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x * 3 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y);
+		DoubleBufferingtext(hWnd, hMemDC, _T("SETTING"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 255, 255));
 	}
 	else
 	{
-
+		DoubleBufferingimage(hWnd, hMemDC, img[4], toggle_x * 3 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y);
+		DoubleBufferingtext(hWnd, hMemDC, _T("SETTING"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 0, 0));
 	}
-	if (!is_in_rectangle(toggle_x * 4 + 500 - bg_tile_x, toggle_y * 3 + toggle_y_interval + 500 - bg_tile_y, toggle_x * 4 + 500 - bg_tile_x + 600, toggle_y * 3 + toggle_y_interval + 500 - bg_tile_y + 60, pos))
+	if (!is_in_rectangle(toggle_x * 4 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y - 20, toggle_x * 4 + 500 - bg_tile_x + 600, toggle_y  + toggle_y_interval * 3 + 500 - bg_tile_y + 60 + 20, pos))
 	{
-	DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x * 4 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y);
-	DoubleBufferingtext(hWnd, hMemDC, _T("EXIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3  + 10 + 500 - bg_tile_y, 580, 60);
+		DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x * 4 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y);
+		DoubleBufferingtext(hWnd, hMemDC, _T("EXIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 255, 255));
 	}
 	else
 	{
-
+		DoubleBufferingimage(hWnd, hMemDC, img[4], toggle_x * 4 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y);
+		DoubleBufferingtext(hWnd, hMemDC, _T("EXIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 0, 0));
 	}
 
 	BitBlt(hdc, 0, 0, bx, by, hMemDC, 500 - bg_tile_x, 500 - bg_tile_y, SRCCOPY);
@@ -132,7 +142,7 @@ void ScreenManager::DoubleBufferingtile(HWND hWnd, HDC hdc, Image * img, int x, 
 
 }
 
-void ScreenManager::DoubleBufferingtext(HWND hWnd, HDC hdc, const TCHAR *str, int x, int y, int r, int b)
+void ScreenManager::DoubleBufferingtext(HWND hWnd, HDC hdc, const TCHAR *str, int x, int y, int r, int b, Color c)
 {
 //	MYRIADPRO
 	PrivateFontCollection PFC;
@@ -143,7 +153,7 @@ void ScreenManager::DoubleBufferingtext(HWND hWnd, HDC hdc, const TCHAR *str, in
 //	FontFamily   fontFamily(L"Arial");
 	Font         font(&fontFamily, 30, FontStyleBold, UnitPoint);
 	RectF        rectF(x, y, x + r, y + b);
-	SolidBrush   solidBrush(Color(255, 255, 255, 255));
+	SolidBrush   solidBrush(c);
 	Graphics g(hdc);
 
 	g.DrawString(str, -1, &font, rectF, NULL, &solidBrush);

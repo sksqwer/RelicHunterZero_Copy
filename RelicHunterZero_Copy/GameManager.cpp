@@ -22,6 +22,8 @@ void GameManager::GDI_Init()
 {
 	GdiplusStartupInput gpsi;
 	GdiplusStartup(&g_GdiToken, &gpsi, NULL);
+
+//	if (&GameManager::getInstance() != this) exit(0);
 }
 
 void GameManager::GDI_ShutDown()

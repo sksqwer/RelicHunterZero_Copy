@@ -16,7 +16,7 @@ void Filesystem::getpath(int itr, char path[][100], int n)
 
 	while (i != itr && infile.good())
 	{
-		csv_read_row(temp, infile, '\t');
+		csv_read_row(temp, infile, ',');
 
 		i++;
 	}
@@ -24,7 +24,7 @@ void Filesystem::getpath(int itr, char path[][100], int n)
 	for (int i = 0; i < n; i++)
 	{
 		if (!infile.good()) break;
-		csv_read_row(path[itr + i], infile, '\t');
+		csv_read_row(path[itr + i], infile, ',');
 	}
 
 	infile.close();
