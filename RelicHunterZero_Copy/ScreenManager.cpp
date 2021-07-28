@@ -1,5 +1,7 @@
 #include "ScreenManager.h"
 #include "GameManager.h"
+#include "FileSystem.h"
+#include "GM_Util.h"
 
 void ScreenManager::Screen(HWND hWnd, HDC hdc)
 {
@@ -22,7 +24,7 @@ void ScreenManager::MainMenu(HWND hWnd, HDC hdc)
 	char path[num][100];
 	TCHAR Tpath[num][100];
 
-	f.getpath(0, path, num);
+	(f).getpath(0, path, num);
 
 	POINT rect = GameManager::getInstance().getrect();
 

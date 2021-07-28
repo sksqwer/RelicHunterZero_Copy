@@ -4,11 +4,8 @@
 
 
 #include "framework.h"
+#include "ScreenManager.h"
 #include "Filesystem.h"
-#include "GM_Util.h"
-
-class ScreenManager;
-class Filesystem;
 
 
 class GameManager
@@ -40,8 +37,8 @@ public:
 	void update();
 	void show(HWND hWnd, HDC hdc);
 	// manager Object
-	ScreenManger &getScreenmanger() { return screenmanager; }
-	Filesystem &getfilemanager() { return filemanager; }
+	ScreenManager getScreenmanger() { return screenmanager; }
+	Filesystem getfilemanager() { return filemanager; }
 };
 
 

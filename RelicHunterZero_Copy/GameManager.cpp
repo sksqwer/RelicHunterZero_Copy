@@ -1,14 +1,20 @@
 #include "GameManager.h"
+#include "ScreenManager.h"
+#include "FileSystem.h"
 
 void GameManager::Init()
 {
 	GDI_Init();
 //	ScM = new ScreenManger();
+//	screenmanager = new ScreenManager();
+//	filemanager = new Filesystem();
 }
 
 void GameManager::ShutDown()
 {
 	GDI_ShutDown();
+//	delete screenmanager;
+//	delete filemanager;
 //	delete ScM;
 }
 
