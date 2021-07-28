@@ -3,6 +3,7 @@
 
 #include "framework.h"
 #include "RelicHunterZero_Copy.h"
+#include "GameManager.h"
 
 #define MAX_LOADSTRING 100
 
@@ -10,6 +11,11 @@
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+
+//custom
+RECT rectview;
+GameManager GM;
+HWND g_hWnd = NULL;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -43,16 +49,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
     // 기본 메시지 루프입니다:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
+	while (true) {
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+			if (msg.message == WM_QUIT) {
+				break;
+			}
+			else {
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+			GM.update();
+			HDC hdc = GetDC(g_hWnd);
+			GM.show(g_hWnd, hdc);
 
-    return (int) msg.wParam;
+			ReleaseDC(g_hWnd, hdc);
+		}
+			
+
+	}
+	return (int)msg.wParam;
 }
 
 
@@ -97,13 +115,28 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle,
+	   WS_OVERLAPPED | WS_POPUP,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+   SetWindowPos(hWnd, HWND_TOP, 0, 0, 
+	   GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) ,
+	   SWP_FRAMECHANGED);
+//   ShowWindow(hWnd, SW_MAXIMIZE);
+
+   //DEVMODE Mode;
+   //ZeroMemory(&Mode, sizeof(DEVMODE));
+   //Mode.dmSize = sizeof(DEVMODE);
+   //Mode.dmPelsWidth = GetSystemMetrics(SM_CXSCREEN); // 가로 해상도
+   //Mode.dmPelsHeight = GetSystemMetrics(SM_CYSCREEN); // 세로 해상도
+   //Mode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+   //ChangeDisplaySettings(&Mode, CDS_FULLSCREEN );
 
    if (!hWnd)
    {
       return FALSE;
    }
+
+   g_hWnd = hWnd;
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -125,6 +158,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+	case WM_CREATE:
+	{
+		GetClientRect(hWnd, &rectview);
+		GM.Init();
+	}
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
@@ -147,10 +185,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
+
+//			GetClientRect(hWnd, &rectview);
+			GM.show(hWnd, hdc);
+
+
             EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
+		GM.ShutDown();
         PostQuitMessage(0);
         break;
     default:
