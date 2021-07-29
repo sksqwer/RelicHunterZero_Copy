@@ -12,9 +12,9 @@ HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
+
 //custom
 RECT rectview;
-//GameManager GM;
 HWND g_hWnd = NULL;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
@@ -65,11 +65,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			HDC hdc = GetDC(g_hWnd);
 			GameManager::getInstance().show(g_hWnd, hdc);
 
+			Inputsystem::getInstance().reset();
+
 			ReleaseDC(g_hWnd, hdc);
 		}
 			
 
 	}
+
+	GameManager::getInstance().ShutDown();
+
 	return (int)msg.wParam;
 }
 
@@ -92,7 +97,9 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_RELICHUNTERZEROCOPY));
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
+//    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDC_CURSOR128));
+//    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
+	wcex.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR0));
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_RELICHUNTERZEROCOPY);
     wcex.lpszClassName  = szWindowClass;
@@ -121,15 +128,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    SetWindowPos(hWnd, HWND_TOP, 0, 0, 
 	   GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) ,
 	   SWP_FRAMECHANGED);
-//   ShowWindow(hWnd, SW_MAXIMIZE);
-
-   //DEVMODE Mode;
-   //ZeroMemory(&Mode, sizeof(DEVMODE));
-   //Mode.dmSize = sizeof(DEVMODE);
-   //Mode.dmPelsWidth = GetSystemMetrics(SM_CXSCREEN); // 가로 해상도
-   //Mode.dmPelsHeight = GetSystemMetrics(SM_CYSCREEN); // 세로 해상도
-   //Mode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-   //ChangeDisplaySettings(&Mode, CDS_FULLSCREEN );
 
    if (!hWnd)
    {
@@ -194,7 +192,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_DESTROY:
-		GameManager::getInstance().ShutDown();
         PostQuitMessage(0);
         break;
     default:

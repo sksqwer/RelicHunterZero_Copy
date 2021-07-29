@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="리소스 파일\Cursor">
+      <UniqueIdentifier>{39386af4-4ded-44a1-b02c-6b57a14c7709}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -39,6 +42,15 @@
     <ClInclude Include="ScreenManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="InputSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MapObject_info.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RelicHunterZero_Copy.cpp">
@@ -56,6 +68,12 @@
     <ClCompile Include="ScreenManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="InputSystem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RelicHunterZero_Copy.rc">
@@ -69,5 +87,25 @@
     <Image Include="RelicHunterZero_Copy.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\sprite\crooshair\Black_cur128.cur">
+      <Filter>리소스 파일\Cursor</Filter>
+    </None>
+    <None Include="resource\sprite\crooshair\Black_cur32.cur">
+      <Filter>리소스 파일\Cursor</Filter>
+    </None>
+    <None Include="resource\sprite\crooshair\Black_cur64.cur">
+      <Filter>리소스 파일\Cursor</Filter>
+    </None>
+    <None Include="resource\sprite\crooshair\Black_cur48.cur">
+      <Filter>리소스 파일\Cursor</Filter>
+    </None>
+    <None Include="resource\sprite\crooshair\Black_cur42.cur">
+      <Filter>리소스 파일\Cursor</Filter>
+    </None>
+    <None Include="resource\sprite\crooshair\Null_cur.cur">
+      <Filter>리소스 파일\Cursor</Filter>
+    </None>
   </ItemGroup>
 </Project>

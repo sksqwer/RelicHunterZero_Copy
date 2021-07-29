@@ -39,6 +39,10 @@ void GameManager::update()
 	oldTime = newTime;
 
 	GetCursorPos(&mouse);
+
+	Inputsystem::getInstance().update();
+
+
 }
 
 void GameManager::show(HWND hWnd, HDC hdc)
@@ -49,5 +53,5 @@ void GameManager::show(HWND hWnd, HDC hdc)
 	oldTime = newTime;*/
 
 
-	screenmanager.Screen(hWnd, hdc);
+	ScreenManager::getInstance().Screen(hWnd, hdc);
 }

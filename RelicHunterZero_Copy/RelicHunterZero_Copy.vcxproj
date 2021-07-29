@@ -155,6 +155,9 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GM_Util.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="MapManager.h" />
+    <ClInclude Include="MapObject_info.h" />
     <ClInclude Include="RelicHunterZero_Copy.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScreenManager.h" />
@@ -164,6 +167,8 @@
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GM_Util.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="RelicHunterZero_Copy.cpp" />
     <ClCompile Include="ScreenManager.cpp" />
   </ItemGroup>
@@ -173,6 +178,14 @@
   <ItemGroup>
     <Image Include="RelicHunterZero_Copy.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\sprite\crooshair\Black_cur32.cur" />
+    <None Include="resource\sprite\crooshair\Black_cur64.cur" />
+    <None Include="resource\sprite\crooshair\Black_cur48.cur" />
+    <None Include="resource\sprite\crooshair\Black_cur42.cur" />
+    <None Include="resource\sprite\crooshair\Black_cur128.cur" />
+    <None Include="resource\sprite\crooshair\Null_cur.cur" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

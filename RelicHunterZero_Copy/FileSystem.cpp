@@ -33,7 +33,6 @@ void Filesystem::getpath(int itr, char path[][100], int n)
 
 void Filesystem::csv_read_row(char *ch, std::istream & infile, char delimiter)
 {
-	bool inquotes = false;
 	int i = 0;
 
 	while (infile.good())
@@ -42,8 +41,9 @@ void Filesystem::csv_read_row(char *ch, std::istream & infile, char delimiter)
 
 		if (c == delimiter)
 			break;
-		else if (c == '\n')
+		else if (c == '\n' || c == '\r')
 			continue;
+
 
 		ch[i++] = c;
 		ch[i] = NULL;
