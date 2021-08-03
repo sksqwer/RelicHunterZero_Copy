@@ -10,8 +10,12 @@ class MapManager
 private:
 	const int mapsize = 50;
 	const int totalviewsize = 5500;
-	POINT mappoint = { 500, 500 };
+	POINT mappoint = { 0, 0 };
+	POINT submappoint = { 0, 0 };
 	MapObject_info **mapinfo = NULL;
+	MapObject_info submap[9][6];
+	MapObject_info mapobject_temp;
+	int map_flag = 0;
 public:
 	//singleton
 	MapManager() {}
@@ -25,6 +29,14 @@ public:
 	void TotalView(HWND hWnd, HDC hdc);
 	void MainView(HWND hWnd, HDC hdc);
 	void SubView(HWND hWnd, HDC hdc);
+	void MapObjectView(HWND hWnd, HDC hdc);
+	void MapCursor_temp(HWND hWnd, HDC hdc);
+	void LoadTile(HDC hdc, MapObject_info map, int i, int j);
+	//set submap
+	void setship();
+	void setdesert();
+	void setgreen();
+	void setvolcano();
 
 
 };

@@ -50,14 +50,14 @@ void ScreenManager::Screen(HWND hWnd, HDC hdc)
 
 void ScreenManager::MainMenu(HWND hWnd, HDC hdc)
 {
-	Filesystem f = Filesystem::getInstance();
-	const int filestart = 0;
+	const int csvrow = 0;
+	const int csvcol = 0;
 	const int filenum = 6;
 
 	char path[filenum][100];
 	TCHAR Tpath[filenum][100];
 
-	(f).getpath(filestart, path, filenum);
+	Filesystem::getInstance().getpath(csvrow, csvcol, path, filenum);
 
 	POINT size = GameManager::getInstance().getsize();
 
@@ -66,6 +66,14 @@ void ScreenManager::MainMenu(HWND hWnd, HDC hdc)
 	HBITMAP hOldBitmap;
 	int bx, by;
 	Image *img[filenum];
+
+	//
+	Image *img2;
+	Image img3(Tpath[0]);
+	//
+
+	img2 = Gdiplus::Image::FromFile(Tpath[0]);
+	//
 	int msglen;
 
 	for (int i = 0; i < filenum; i++)
@@ -106,26 +114,26 @@ void ScreenManager::MainMenu(HWND hWnd, HDC hdc)
 	if (!is_in_rectangle(toggle_x + 500 - bg_tile_x, toggle_y + 500 - bg_tile_y - 20, toggle_x + 500 - bg_tile_x + 600, toggle_y + 500 - bg_tile_y + 60 + 20, pos))
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x + 500 - bg_tile_x, toggle_y + 500 - bg_tile_y); // toggle 
-		DoubleBufferingtext(hWnd, hMemDC, _T("PLAY  ADVENTURE"), 50 + 500 - bg_tile_x, toggle_y + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 255, 255)); // text
+		DoubleBufferingtext(hWnd, hMemDC, _T("PLAY  ADVENTURE"), 50 + 500 - bg_tile_x, toggle_y + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 255, 255)); // text
 	}
 	else
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[4], toggle_x + 500 - bg_tile_x, toggle_y + 500 - bg_tile_y); // toggle 
 		DoubleBufferingimage(hWnd, hMemDC, img[5], toggle_x + 1400 - bg_tile_x, toggle_y + 500 - bg_tile_y); // star toggle 
-		DoubleBufferingtext(hWnd, hMemDC, _T("PLAY  ADVENTURE"), 50 + 500 - bg_tile_x, toggle_y + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 0, 0)); // text
+		DoubleBufferingtext(hWnd, hMemDC, _T("PLAY  ADVENTURE"), 50 + 500 - bg_tile_x, toggle_y + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 0, 0)); // text
 	}
 
 	if (!is_in_rectangle(toggle_x * 2 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 500 - bg_tile_y - 20, toggle_x * 2 + 500 - bg_tile_x + 600, toggle_y + toggle_y_interval + 500 - bg_tile_y + 60 + 20, pos))
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x * 2 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 500 - bg_tile_y);
-		DoubleBufferingtext(hWnd, hMemDC, _T("MAP  EDIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 255, 255));
+		DoubleBufferingtext(hWnd, hMemDC, _T("MAP  EDIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 255, 255));
 
 	}
 	else
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[4], toggle_x * 2 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 500 - bg_tile_y);
 		DoubleBufferingimage(hWnd, hMemDC, img[5], toggle_x * 2 + 1400 - bg_tile_x, toggle_y + toggle_y_interval + 500 - bg_tile_y);
-		DoubleBufferingtext(hWnd, hMemDC, _T("MAP  EDIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 0, 0));
+		DoubleBufferingtext(hWnd, hMemDC, _T("MAP  EDIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 0, 0));
 		if (Inputsystem::getInstance().mou_L)
 			GameManager::getInstance().setScreenflag(4);
 	}
@@ -133,28 +141,27 @@ void ScreenManager::MainMenu(HWND hWnd, HDC hdc)
 	if (!is_in_rectangle(toggle_x * 3 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y - 20, toggle_x * 3 + 500 - bg_tile_x + 600, toggle_y+ toggle_y_interval * 2 + 500 - bg_tile_y + 60 + 20, pos))
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x * 3 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y);
-		DoubleBufferingtext(hWnd, hMemDC, _T("SETTING"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 255, 255));
+		DoubleBufferingtext(hWnd, hMemDC, _T("SETTING"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 255, 255));
 	}
 	else
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[4], toggle_x * 3 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y);
 		DoubleBufferingimage(hWnd, hMemDC, img[5], toggle_x * 3 + 1400 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 500 - bg_tile_y);
-		DoubleBufferingtext(hWnd, hMemDC, _T("SETTING"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 0, 0));
+		DoubleBufferingtext(hWnd, hMemDC, _T("SETTING"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 2 + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 0, 0));
 	}
 	if (!is_in_rectangle(toggle_x * 4 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y - 20, toggle_x * 4 + 500 - bg_tile_x + 600, toggle_y  + toggle_y_interval * 3 + 500 - bg_tile_y + 60 + 20, pos))
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[3], toggle_x * 4 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y);
-		DoubleBufferingtext(hWnd, hMemDC, _T("EXIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 255, 255));
+		DoubleBufferingtext(hWnd, hMemDC, _T("EXIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 255, 255));
 	}
 	else
 	{
 		DoubleBufferingimage(hWnd, hMemDC, img[4], toggle_x * 4 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y);
 		DoubleBufferingimage(hWnd, hMemDC, img[5], toggle_x * 4 + 1400 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y);
-		DoubleBufferingtext(hWnd, hMemDC, _T("EXIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 10 + 500 - bg_tile_y, 580, 60, Color(255, 255, 0, 0));
+		DoubleBufferingtext(hWnd, hMemDC, _T("EXIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 0, 0));
 		if (Inputsystem::getInstance().mou_L)
 			exit(0);
 	}
-
 	SetCursor(hWnd, hMemDC, 500 - bg_tile_x, 500 - bg_tile_y, 0);
 
 	BitBlt(hdc, 0, 0, bx, by, hMemDC, 500 - bg_tile_x, 500 - bg_tile_y, SRCCOPY);
@@ -191,7 +198,7 @@ void ScreenManager::DoubleBufferingtile(HWND hWnd, HDC hdc, Image * img, int x, 
 
 }
 
-void ScreenManager::DoubleBufferingtext(HWND hWnd, HDC hdc, const TCHAR *str, int x, int y, int r, int b, Color c)
+void ScreenManager::DoubleBufferingtext(HWND hWnd, HDC hdc, const TCHAR *str, int x, int y, int r, int b, int size, Color c)
 {
 //	MYRIADPRO
 	PrivateFontCollection PFC;
@@ -200,7 +207,7 @@ void ScreenManager::DoubleBufferingtext(HWND hWnd, HDC hdc, const TCHAR *str, in
 	int numFamilies;
 	PFC.GetFamilies(1, &fontFamily, &numFamilies);
 //	FontFamily   fontFamily(L"Arial");
-	Font         font(&fontFamily, 30, FontStyleBold, UnitPoint);
+	Font         font(&fontFamily, size, FontStyleBold, UnitPoint);
 	RectF        rectF(x, y, x + r, y + b);
 	SolidBrush   solidBrush(c);
 	Graphics g(hdc);

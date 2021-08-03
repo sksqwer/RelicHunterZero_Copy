@@ -10,6 +10,7 @@ public:
 	bool key_S = false;
 	bool key_D = false;
 	bool key_Q = false;
+	bool key_E = false;
 	bool key_R = false;
 	bool key_F = false;
 	bool key_SHIFT = false;
@@ -21,6 +22,7 @@ public:
 	//special
 	bool key_F1 = false;
 	bool key_F2 = false;
+	bool key_CTRL = false;
 	//singleton
 	Inputsystem() {}
 	Inputsystem(const Inputsystem& ref) {}

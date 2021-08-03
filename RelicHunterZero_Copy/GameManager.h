@@ -20,9 +20,9 @@ public:
 	//singleton
 	GameManager() {}
 	GameManager(const GameManager& ref) {}
-	GameManager& operator=(const GameManager& ref) {}
+	GameManager& operator=(const GameManager& ref) { }
 	~GameManager() {}
-	static GameManager& getInstance() { static GameManager GM;return GM; }
+	static GameManager& getInstance() { static GameManager GM; return GM; }
 	// return
 	int getScreen_flag() { return Screen_flag; }
 	POINT getsize() { return size; }
