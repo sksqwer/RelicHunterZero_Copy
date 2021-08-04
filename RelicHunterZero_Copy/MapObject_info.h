@@ -20,6 +20,8 @@ public:
 	int row = 0;
 	int type = 0;
 	int attr = 10;
+	int imgrow = 100;
+	int imgcol = 100;
 	int rotation = 0;
 	MapObject_info *Shadow = NULL;
 	//temp

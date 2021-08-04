@@ -17,7 +17,7 @@ void GameManager::ShutDown()
 	delete[] ship;
 	delete[] green;
 	delete[] desert;
-	delete[] vocano;
+	delete[] volcano;
 	delete[] obstacle;
 //	delete screenmanager;
 //	delete filemanager;
@@ -130,16 +130,61 @@ void GameManager::load_ship()
 	}
 }
 
-void GameManager::load_green()
-{
-}
-
 void GameManager::load_desert()
 {
+	const int CSVrow = 3;
+	const int CSVcol = 0;
+	const int filenum = sizeof(desert) / sizeof(Image*);
+	char path[filenum][100];
+	TCHAR Tpath[filenum][100];
+
+	for (int i = 0; i < filenum; i++)
+	{
+		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
+		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
+		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
+		Tpath[i][msglen] = NULL;
+
+		desert[i] = Gdiplus::Image::FromFile(Tpath[i]);
+	}
+}
+
+void GameManager::load_green()
+{
+	const int CSVrow = 4;
+	const int CSVcol = 0;
+	const int filenum = sizeof(green) / sizeof(Image*);
+	char path[filenum][100];
+	TCHAR Tpath[filenum][100];
+
+	for (int i = 0; i < filenum; i++)
+	{
+		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
+		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
+		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
+		Tpath[i][msglen] = NULL;
+
+		green[i] = Gdiplus::Image::FromFile(Tpath[i]);
+	}
 }
 
 void GameManager::load_vocano()
 {
+	const int CSVrow = 5;
+	const int CSVcol = 0;
+	const int filenum = sizeof(volcano) / sizeof(Image*);
+	char path[filenum][100];
+	TCHAR Tpath[filenum][100];
+
+	for (int i = 0; i < filenum; i++)
+	{
+		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
+		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
+		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
+		Tpath[i][msglen] = NULL;
+
+		volcano[i] = Gdiplus::Image::FromFile(Tpath[i]);
+	}
 }
 
 void GameManager::load_obstacle()

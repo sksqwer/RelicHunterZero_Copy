@@ -495,10 +495,10 @@ void MapManager::LoadTile(HDC hdc, MapObject_info map, int i, int j)
 
 	g.SetTransform(&mat);
 
-	Rect rect(i, j, 100 * map.row, 100 * map.col);
+	Rect rect(i, j, map.imgrow, map.imgcol);
 	g.DrawImage(returnimagepointer(map.col, map.row), rect,
 		0, 0,
-		100 * map.row, 100 * map.col, UnitPixel);
+		map.imgrow, map.imgcol, UnitPixel);
 
 
 	//Rect rect(i, j - (map.imgsizecol - 100), 100 * map.row, 100 * map.col);
@@ -575,291 +575,139 @@ void MapManager::setship()
 	//		const int csvcol = 0;
 	//		const int filenum = 7; 	
 	int a = 0;
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j < 6; j++)
+		for (int j = 0; j < 5; j++)
 		{
-			submap[i][j].in_use = true;
-			submap[i][j].col = 2;
-			submap[i][j].row = a++;
-			submap[i][j].type = MapObject_info::TILE;
+			submap[j][i].in_use = true;
+			submap[j][i].col = 2;
+			submap[j][i].row = a++;
+			submap[j][i].type = MapObject_info::TILE;
 		}
 	}
+
+	for(int i = 4; i < 6; i++)
+		for (int j = 5; j < 9; j++)
+		{
+			if (a == 28) break;
+			submap[j][i].in_use = true;
+			submap[j][i].col = 2;
+			submap[j][i].row = a++;
+			submap[j][i].type = MapObject_info::TILE;
+		}
+
+
 }
 
 void MapManager::setdesert()
 {
-	//		const int csvrow = 3;
-	//		const int csvcol = 0;
-	//		const int filenum = 13; 	
-
+	int a = 0;
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			submap[i][j].in_use = true;
-			submap[i][j].type = MapObject_info::TILE;
-			submap[i][j].attr = MapObject_info::BLOCK;
+			submap[j][i].in_use = true;
+			submap[j][i].col = 3;
+			submap[j][i].row = a++;
+			submap[j][i].type = MapObject_info::TILE;
 		}
 	}
 	for (int i = 4; i < 6; i++)
 	{
 		submap[0][i].in_use = true;
+		submap[0][i].col = 3;
+		submap[0][i].row = a++;
 		submap[0][i].type = MapObject_info::TILE;
-		submap[0][i].attr = MapObject_info::ROAD;
 	}
-	for (int i = 0; i < 2; i++)
+
+	for (int i = 0; i < 6; i += 2)
 	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
+		for (int j = 4; j < 9; j++)
+		{
+			if (a == 28) break;
+			submap[j][i].in_use = true;
+			submap[j][i].col = 3;
+			submap[j][i].imgcol = 177;
+			submap[j][i].row = a++;
+
+			submap[j][i].type = MapObject_info::SHADOW;
+		}
 	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[7][i].in_use = true;
-		submap[7][i].type = MapObject_info::TILE;
-		submap[7][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[7][i].in_use = true;
-		submap[7][i].type = MapObject_info::TILE;
-		submap[7][i].attr = MapObject_info::SHADOW;
-	}
+
+
+
 }
 
 void MapManager::setgreen()
 {
-	//		const int csvrow = 4;
-	//		const int csvcol = 0;
-	//		const int filenum = 12; 	
-
+	int a = 0;
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			submap[i][j].in_use = true;
-			submap[i][j].type = MapObject_info::TILE;
-			submap[i][j].attr = MapObject_info::BLOCK;
+			submap[j][i].in_use = true;
+			submap[j][i].col = 4;
+			submap[j][i].row = a++;
+			submap[j][i].type = MapObject_info::TILE;
 		}
 	}
 	for (int i = 4; i < 6; i++)
 	{
 		submap[0][i].in_use = true;
+		submap[0][i].col = 4;
+		submap[0][i].row = a++;
 		submap[0][i].type = MapObject_info::TILE;
-		submap[0][i].attr = MapObject_info::ROAD;
 	}
-	for (int i = 0; i < 2; i++)
+
+	for (int i = 0; i < 6; i += 2)
 	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
+		for (int j = 4; j < 9; j++)
+		{
+			if (a == 28) break;
+			submap[j][i].in_use = true;
+			submap[j][i].col = 4;
+			submap[j][i].imgcol = 177;
+			submap[j][i].row = a++;
+
+			submap[j][i].type = MapObject_info::SHADOW;
+		}
 	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[7][i].in_use = true;
-		submap[7][i].type = MapObject_info::TILE;
-		submap[7][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[7][i].in_use = true;
-		submap[7][i].type = MapObject_info::TILE;
-		submap[7][i].attr = MapObject_info::SHADOW;
-	}
+
 }
 
 void MapManager::setvolcano()
 {
-	//		const int csvrow = 5;
-	//		const int csvcol = 0;
-	//		const int filenum = 12; 	
-
+	int a = 0;
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			submap[i][j].in_use = true;
-			submap[i][j].type = MapObject_info::TILE;
-			submap[i][j].attr = MapObject_info::BLOCK;
+			submap[j][i].in_use = true;
+			submap[j][i].col = 5;
+			submap[j][i].row = a++;
+			submap[j][i].type = MapObject_info::TILE;
 		}
 	}
 	for (int i = 4; i < 6; i++)
 	{
 		submap[0][i].in_use = true;
+		submap[0][i].col = 5;
+		submap[0][i].row = a++;
 		submap[0][i].type = MapObject_info::TILE;
-		submap[0][i].attr = MapObject_info::ROAD;
 	}
-	for (int i = 0; i < 2; i++)
+
+	for (int i = 0; i < 6; i += 2)
 	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[4][i].in_use = true;
-		submap[4][i].type = MapObject_info::TILE;
-		submap[4][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[5][i].in_use = true;
-		submap[5][i].type = MapObject_info::TILE;
-		submap[5][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 4; i < 6; i++)
-	{
-		submap[6][i].in_use = true;
-		submap[6][i].type = MapObject_info::TILE;
-		submap[6][i].attr = MapObject_info::SHADOW;
-	}
-	//
-	for (int i = 0; i < 2; i++)
-	{
-		submap[7][i].in_use = true;
-		submap[7][i].type = MapObject_info::TILE;
-		submap[7][i].attr = MapObject_info::SHADOW;
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		submap[7][i].in_use = true;
-		submap[7][i].type = MapObject_info::TILE;
-		submap[7][i].attr = MapObject_info::SHADOW;
+		for (int j = 4; j < 9; j++)
+		{
+			if (a == 28) break;
+			submap[j][i].in_use = true;
+			submap[j][i].col = 5;
+			submap[j][i].imgcol = 177;
+			submap[j][i].row = a++;
+
+			submap[j][i].type = MapObject_info::SHADOW;
+		}
 	}
 }
 
@@ -918,11 +766,11 @@ Image *MapManager::returnimagepointer(int n, int m)
 	case 2:
 		return (GameManager::getInstance().ship)[m];
 	case 3:
-		return (GameManager::getInstance().green)[m];
-	case 4:
 		return (GameManager::getInstance().desert)[m];
+	case 4:
+		return (GameManager::getInstance().green)[m];
 	case 5:
-		return (GameManager::getInstance().vocano)[m];
+		return (GameManager::getInstance().volcano)[m];
 	case 6:
 		return (GameManager::getInstance().obstacle)[m];
 	}

@@ -20,10 +20,10 @@ public:
 	//Image
 	Image *menu[6];
 	Image *maptoggle[3];
-	Image *ship[27];
-	Image *green[12];
-	Image *desert[12];
-	Image *vocano[12];
+	Image *ship[28];
+	Image *desert[28];
+	Image *green[28];
+	Image *volcano[28];
 	Image *obstacle[6];
 	//singleton
 	GameManager() {}
@@ -49,8 +49,8 @@ public:
 	void load_menu();
 	void load_maptoggle();
 	void load_ship();
-	void load_green();
 	void load_desert();
+	void load_green();
 	void load_vocano();
 	void load_obstacle();
 
