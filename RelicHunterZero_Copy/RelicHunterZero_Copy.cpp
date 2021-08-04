@@ -62,12 +62,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		else
 		{
 			GameManager::getInstance().update();
-			HDC hdc = GetDC(g_hWnd);
-			GameManager::getInstance().show(g_hWnd, hdc);
+			GameManager::getInstance().show();
 
 			Inputsystem::getInstance().reset();
-
-			ReleaseDC(g_hWnd, hdc);
 		}
 			
 
@@ -184,8 +181,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
 
-//			GetClientRect(hWnd, &rectview);
-			GameManager::getInstance().show(hWnd, hdc);
+			GameManager::getInstance().show();
 
 
             EndPaint(hWnd, &ps);

@@ -19,7 +19,10 @@ private:
 	std::vector<item_info> Vitem;
 	std::vector<enemy_info> Venemy;
 	int map_flag = 0;
-//	Graphics g;
+	Graphics *g;
+
+
+
 public:
 	//singleton
 	MapManager() {}
@@ -30,12 +33,13 @@ public:
 	//
 	void Edit_init();
 	void Edit_shutdown();
-	void TotalView(HWND hWnd, HDC hdc);
-	void MainView(HWND hWnd, HDC hdc);
-	void SubView(HWND hWnd, HDC hdc);
-	void MapObjectView(HWND hWnd, HDC hdc);
-	void MapCursor_temp(HWND hWnd, HDC hdc);
-	void LoadTile(HDC hdc, MapObject_info map, int i, int j, int kind);
+	void TotalView();
+	void MainView(HDC hdc);
+	void SubView(HDC hdc);
+	void MapObjectView(HDC hdc);
+	void MapCursor_temp(HDC hdc);
+	//
+	void LoadTile(HDC hdc, MapObject_info map, int i, int j);
 	void LoadTile(HDC hdc, obstacle_info &o);
 	void LoadTile(HDC hdc, item_info &i);
 	void LoadTile(HDC hdc, enemy_info &e);
@@ -48,7 +52,8 @@ public:
 	void setcage();
 	void setweapon();
 	void setetc();
-
+	//
+	Image *returnimagepointer(int n, int m);
 
 };
 

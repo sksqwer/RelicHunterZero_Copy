@@ -17,6 +17,14 @@ private:
 	int Screen_flag = 1;
 	POINT mouse;
 public:
+	//Image
+	Image *menu[6];
+	Image *maptoggle[3];
+	Image *ship[27];
+	Image *green[12];
+	Image *desert[12];
+	Image *vocano[12];
+	Image *obstacle[6];
 	//singleton
 	GameManager() {}
 	GameManager(const GameManager& ref) {}
@@ -35,7 +43,17 @@ public:
 	void GDI_Init();
 	void GDI_ShutDown();
 	void update();
-	void show(HWND hWnd, HDC hdc);
+	void show();
+	void Load_Image();
+	//Imageload
+	void load_menu();
+	void load_maptoggle();
+	void load_ship();
+	void load_green();
+	void load_desert();
+	void load_vocano();
+	void load_obstacle();
+
 };
 
 

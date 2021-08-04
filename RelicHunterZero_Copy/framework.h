@@ -20,7 +20,6 @@
 #pragma comment(lib, "Gdiplus.lib")
 #pragma comment(lib,"msimg32.lib")
 
-using namespace Gdiplus;
 #include <ocidl.h>
 #include <vector>
 #include <ctime>
@@ -28,3 +27,9 @@ using namespace Gdiplus;
 #include <atlbase.h> 
 
 //
+
+
+extern HWND g_hWnd;
+
+
+using namespace Gdiplus;

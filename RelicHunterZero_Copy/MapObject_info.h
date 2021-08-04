@@ -16,14 +16,8 @@ public:
 	enum {TILE = 0, OBSTACLE = 1, ITEM = 2, ENEMY = 3}; //type
 	enum {ROAD = 10, BLOCK = 11, SHADOW = 12};			// attr
 	POINT pos = { 0 ,0 };
-	int row = 1;
-	int col = 1;
-	int CSVrow = 0;
-	int CSVcol = 0;
-	int imgcutrow = 0;
-	int imgcutcol = 0;
-	int imgsizerow = 100;
-	int imgsizecol = 100;
+	int col = 0;
+	int row = 0;
 	int type = 0;
 	int attr = 10;
 	int rotation = 0;
@@ -33,16 +27,11 @@ public:
 	item_info item_temp;
 	enemy_info enemy_temp;
 	//
-	void MapObject_set(int a, int b) { type = a; attr = b; }
 	void MapObject_reset()
 	{
 		in_use = false;
 		is_occupy = false;
 		pos = { 0, 0 };
-		CSVrow = 0;
-		CSVcol = 0;
-		imgcutrow = 0;
-		imgcutcol = 0;
 		type = 0;
 		attr = 10;
 		if (Shadow)
