@@ -11,17 +11,20 @@ void GameManager::Init()
 void GameManager::ShutDown()
 {
 	GDI_ShutDown();
-
-	delete[] menu;
-	delete[] maptoggle;
-	delete[] ship;
-	delete[] green;
-	delete[] desert;
-	delete[] volcano;
-	delete[] obstacle;
-//	delete screenmanager;
-//	delete filemanager;
-//	delete ScM;
+	
+	for(int i = 0; i < sizeof(menu) / sizeof(Image *); i++)
+		delete menu[i];
+	for (int i = 0; i < sizeof(maptoggle) / sizeof(Image *); i++)
+		delete maptoggle[i];
+	for (int i = 0; i < sizeof(ship) / sizeof(Image *); i++)
+		delete ship[i];
+	for (int i = 0; i < sizeof(green) / sizeof(Image *); i++)
+		delete green[i];
+	for (int i = 0; i < sizeof(desert) / sizeof(Image *); i++)
+		delete desert[i];
+	for (int i = 0; i < sizeof(volcano) / sizeof(Image *); i++)
+		delete volcano[i];
+//	delete[] obstacle;
 }
 
 void GameManager::GDI_Init()

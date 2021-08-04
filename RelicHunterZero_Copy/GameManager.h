@@ -24,7 +24,7 @@ public:
 	Image *desert[28];
 	Image *green[28];
 	Image *volcano[28];
-	Image *obstacle[6];
+//	Image *obstacle[6];
 	//singleton
 	GameManager() {}
 	GameManager(const GameManager& ref) {}

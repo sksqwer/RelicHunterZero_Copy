@@ -185,36 +185,16 @@ void MapManager::MainView(HDC hdc)
 						if (Inputsystem::getInstance().key_CTRL)
 						{
 
-							static bool skip = true;
+							static int skip = 0;
 						
 							for (int i = minx; i <= maxx; i++)
 							{
-								if (!((maxx - minx + 1) % 2))
-								{
-									if (skip)
-									{
-										skip = false;
-									}
-									else
-									{
-										skip = true;
-
-									}
-								}
+								if (skip == 0) skip = 1;
+								else skip = 0;
 								for (int j = miny; j <= maxy; j++)
 								{
-
-									if (skip)
-									{
-										skip = false;
+									if (j % 2 == skip)
 										continue;
-									}
-									else
-									{
-										skip = true;
-
-									}
-
 
 									mapinfo[mappoint.x + i][mappoint.y + j] = mapobject_temp;
 									mapinfo[mappoint.x + i][mappoint.y + j].attr = mapobject_temp.attr;
@@ -771,8 +751,8 @@ Image *MapManager::returnimagepointer(int n, int m)
 		return (GameManager::getInstance().green)[m];
 	case 5:
 		return (GameManager::getInstance().volcano)[m];
-	case 6:
-		return (GameManager::getInstance().obstacle)[m];
+	//case 6:
+	//	return (GameManager::getInstance().obstacle)[m];
 	}
 	
 
