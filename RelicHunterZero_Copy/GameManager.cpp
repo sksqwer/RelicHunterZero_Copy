@@ -49,7 +49,7 @@ void GameManager::show(HWND hWnd, HDC hdc)
 {/*
 	DWORD newTime = GetTickCount();
 	static DWORD oldTime = newTime;
-	if (newTime - oldTime < 60) return;
+	if (newTime - oldTime < 40) return;
 	oldTime = newTime;*/
 
 

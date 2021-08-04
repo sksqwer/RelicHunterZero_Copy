@@ -51,6 +51,15 @@
     <ClInclude Include="MapObject_info.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Item_info.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="obstacle_info.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_info.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RelicHunterZero_Copy.cpp">
