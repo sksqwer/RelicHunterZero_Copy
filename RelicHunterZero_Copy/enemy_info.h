@@ -3,13 +3,14 @@
 #define _ENEMY_INFO_H_
 
 #include "framework.h"
+#include "MapObject_info.h"
 
-class enemy_info
+class enemy_info : public MapObject_info
 {
 public:
-	enum { DUCK = 1, DUCK2= 2, DUCK3 = 3, KAMIKAZE1 = 4, KAMIKAZE2 = 5,
-			TURTLE1 = 6, TURTLE2 = 7, TURTLE3 = 8, BOSS = 9};
-	int kind = 1;
+	enum { DUCK = 51, DUCK2= 52, DUCK3 = 53, KAMIKAZE1 = 54, KAMIKAZE2 = 55,
+			TURTLE1 = 56, TURTLE2 = 57, TURTLE3 = 58, BOSS = 59};
+	int kind = 51;
 	POINT pos = { 0, 0 };
 	int CSVrow = 0;
 	int CSVcol = 0;

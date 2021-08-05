@@ -3,20 +3,16 @@
 #define _OBSTACLE_H_
 
 #include "framework.h"
+#include "MapObject_info.h"
 
-class obstacle_info
+class obstacle_info : public MapObject_info
 {
 public:
-	enum { STATIC = 0, MOVE = 1 };
-	enum { BOX = 10, ROOT = 11, CAGE = 12 };
-	int type = 0;
+	enum { STATIC = 20, ANIMATION = 21 };
+	enum { BOX = 30, ROOT = 31, CAGE = 32 };
+	int obstacle_type = 0;
 	int kind = 10;
-	POINT pos = { 0, 0 };
-	int CSVrow = 0;
-	int CSVcol = 0;
-	int imgsizerow = 100;
-	int imgsizecol = 100;
-	int rotation = 0;
+	int framelimit = 0;
 };
 
 #endif // !_OBSTACLE_H_

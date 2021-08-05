@@ -18,13 +18,20 @@ private:
 	POINT mouse;
 public:
 	//Image
-	Image *menu[6];
-	Image *maptoggle[3];
-	Image *ship[28];
-	Image *desert[28];
-	Image *green[28];
-	Image *volcano[28];
-//	Image *obstacle[6];
+	Image *menu[6] = { nullptr };
+	Image *maptoggle[3] = { nullptr };
+	Image *ship[28] = { nullptr };
+	Image *desert[28] = { nullptr };
+	Image *green[28] = { nullptr };
+	Image *volcano[28] = { nullptr };
+//	Image *obstacle[6] = { nullptr };
+//	Image *menu;
+//	Image *maptoggle;
+//	Image *ship;
+//	Image *desert;
+//	Image *green;
+//	Image *volcano;
+
 	//singleton
 	GameManager() {}
 	GameManager(const GameManager& ref) {}

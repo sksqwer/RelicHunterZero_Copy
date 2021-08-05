@@ -12,12 +12,10 @@ private:
 	const int totalviewsize = 5500;
 	POINT mappoint = { 0, 0 };
 	POINT submappoint = { 0, 0 };
-	MapObject_info **mapinfo = NULL;
+	MapObject_info **Map_Layer_1 = NULL;
+	MapObject_info **Map_Layer_2 = NULL;
 	MapObject_info submap[9][6];
 	MapObject_info mapobject_temp;
-	std::vector<obstacle_info> Vobstacle;
-	std::vector<item_info> Vitem;
-	std::vector<enemy_info> Venemy;
 	int map_flag = 0;
 	Graphics *g;
 
@@ -40,9 +38,6 @@ public:
 	void MapCursor_temp(HDC hdc);
 	//
 	void LoadTile(HDC hdc, MapObject_info map, int i, int j);
-	void LoadTile(HDC hdc, obstacle_info &o);
-	void LoadTile(HDC hdc, item_info &i);
-	void LoadTile(HDC hdc, enemy_info &e);
 	//set submap
 	void setship();
 	void setdesert();

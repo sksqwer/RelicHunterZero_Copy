@@ -4,10 +4,13 @@
 
 void MapManager::Edit_init()
 {
-	mapinfo = new MapObject_info*[mapsize];
+	Map_Layer_1 = new MapObject_info*[mapsize];
 	for (int i = 0; i < mapsize; i++)
-		mapinfo[i] = new MapObject_info[mapsize];
+		Map_Layer_1[i] = new MapObject_info[mapsize];
 
+	Map_Layer_2 = new MapObject_info*[mapsize];
+	for (int i = 0; i < mapsize; i++)
+		Map_Layer_2[i] = new MapObject_info[mapsize];
 
 	void LoadImage();
 
@@ -15,23 +18,15 @@ void MapManager::Edit_init()
 
 void MapManager::Edit_shutdown()
 {
-	Vobstacle.clear();
-	Vitem.clear();
-	Venemy.clear();
+	for (int i = 0; i < mapsize; i++)
+		delete Map_Layer_1[i];
 
-	for(int i = 0 ; i < 50; i++)
-		for (int j = 0; j < 50; j++)
-		{
-			if (mapinfo[i][j].Shadow)
-				delete mapinfo[i][j].Shadow;
-		}
+	delete Map_Layer_1;
 
 	for (int i = 0; i < mapsize; i++)
-		delete mapinfo[i];
+		delete Map_Layer_2[i];
 
-	delete mapinfo;
-
-
+	delete Map_Layer_2;
 }
 
 void MapManager::TotalView()
@@ -103,19 +98,28 @@ void MapManager::MainView(HDC hdc)
 	{
 		for (int j = mappoint.y; j < mappoint.y + 10; j++)
 		{
-			if (mapinfo[mappoint.x + i][mappoint.y + j].in_use)
+			if (Map_Layer_1[mappoint.x + i][mappoint.y + j].in_use)
 			{
-				LoadTile(hMemDC, mapinfo[mappoint.x + i][mappoint.y + j], 100 * i, 50 + 100 * j);
+				LoadTile(hMemDC, Map_Layer_1[mappoint.x + i][mappoint.y + j], 100 * i, 50 + 100 * j);
 				
-				for (int i = 0; i < Vobstacle.size(); i++)
-					LoadTile(hMemDC, Vobstacle[i]);
-
-				for (int i = 0; i < Vitem.size(); i++)
-					LoadTile(hMemDC, Vitem[i]);
-
-				for (int i = 0; i < Venemy.size(); i++)
-					LoadTile(hMemDC, Venemy[i]);
 			}
+
+			
+			
+
+		}
+	}
+	for (int i = mappoint.x; i < mappoint.x + 10; i++)
+	{
+		for (int j = mappoint.y; j < mappoint.y + 10; j++)
+		{
+			if (Map_Layer_2[mappoint.x + i][mappoint.y + j].in_use)
+			{
+				LoadTile(hMemDC, Map_Layer_2[mappoint.x + i][mappoint.y + j], 100 * i, 50 + 100 * j);
+
+			}
+			//LOAD OBSTACLE ITEM ENEMY
+
 			Pen yellowpen(Color(255, 255, 0, 255), 3);
 
 			static POINT premouse;
@@ -129,34 +133,25 @@ void MapManager::MainView(HDC hdc)
 				{
 					if (mapobject_temp.attr == MapObject_info::SHADOW)
 					{
-						if (mapinfo[mappoint.x + i][mappoint.y + j].Shadow)
-							delete mapinfo[mappoint.x + i][mappoint.y + j].Shadow;
-
-						mapinfo[mappoint.x + i][mappoint.y + j].Shadow = new MapObject_info;
-						*mapinfo[mappoint.x + i][mappoint.y + j].Shadow = mapobject_temp;
-						(*mapinfo[mappoint.x + i][mappoint.y + j].Shadow).attr = mapobject_temp.attr;
-						(*mapinfo[mappoint.x + i][mappoint.y + j].Shadow).type = mapobject_temp.type;
-						(*mapinfo[mappoint.x + i][mappoint.y + j].Shadow).pos = { mappoint.x + i,mappoint.y + j };
+						//LAYER2¿¡ SHADOW°´Ã¼ Ãß°¡
+						Map_Layer_2[mappoint.x + i][mappoint.y + j] = mapobject_temp;
+						Map_Layer_2[mappoint.x + i][mappoint.y + j].attr = mapobject_temp.attr;
+						Map_Layer_2[mappoint.x + i][mappoint.y + j].object_type = mapobject_temp.object_type;
+						Map_Layer_2[mappoint.x + i][mappoint.y + j].pos = { mappoint.x + i,mappoint.y + j };
 					}
-					else if (mapobject_temp.type == MapObject_info::OBSTACLE)
+					else if (mapobject_temp.object_type == MapObject_info::OBSTACLE)
 					{
-						mapinfo[mappoint.x + i][mappoint.y + j].in_use = true;
-						mapobject_temp.obstacle_temp.pos = { mappoint.x + i,mappoint.y + j };
-						Vobstacle.push_back(mapobject_temp.obstacle_temp);
+
 
 					}
-					else if (mapobject_temp.type == MapObject_info::ITEM)
+					else if (mapobject_temp.object_type == MapObject_info::ITEM)
 					{
-						mapinfo[mappoint.x + i][mappoint.y + j].in_use = true;
-						mapobject_temp.item_temp.pos = { mappoint.x + i,mappoint.y + j };
-						Vitem.push_back(mapobject_temp.item_temp);
+
 
 					}
-					else if (mapobject_temp.type == MapObject_info::ENEMY)
+					else if (mapobject_temp.object_type == MapObject_info::ENEMY)
 					{
-						mapinfo[mappoint.x + i][mappoint.y + j].in_use = true;
-						mapobject_temp.enemy_temp.pos = { mappoint.x + i,mappoint.y + j };
-						Venemy.push_back(mapobject_temp.enemy_temp);
+
 					}
 					else
 					{
@@ -186,7 +181,7 @@ void MapManager::MainView(HDC hdc)
 						{
 
 							static int skip = 0;
-						
+
 							for (int i = minx; i <= maxx; i++)
 							{
 								if (skip == 0) skip = 1;
@@ -196,23 +191,23 @@ void MapManager::MainView(HDC hdc)
 									if (j % 2 == skip)
 										continue;
 
-									mapinfo[mappoint.x + i][mappoint.y + j] = mapobject_temp;
-									mapinfo[mappoint.x + i][mappoint.y + j].attr = mapobject_temp.attr;
-									mapinfo[mappoint.x + i][mappoint.y + j].type = mapobject_temp.type;
-									mapinfo[mappoint.x + i][mappoint.y + j].pos = { mappoint.x + i,mappoint.y + j };
+									Map_Layer_1[mappoint.x + i][mappoint.y + j] = mapobject_temp;
+									Map_Layer_1[mappoint.x + i][mappoint.y + j].attr = mapobject_temp.attr;
+									Map_Layer_1[mappoint.x + i][mappoint.y + j].object_type = mapobject_temp.object_type;
+									Map_Layer_1[mappoint.x + i][mappoint.y + j].pos = { mappoint.x + i,mappoint.y + j };
 								}
 							}
-								
+
 						}
 						else
 						{
 							for (int i = minx; i <= maxx; i++)
 								for (int j = miny; j <= maxy; j++)
 								{
-									mapinfo[mappoint.x + i][mappoint.y + j] = mapobject_temp;
-									mapinfo[mappoint.x + i][mappoint.y + j].attr = mapobject_temp.attr;
-									mapinfo[mappoint.x + i][mappoint.y + j].type = mapobject_temp.type;
-									mapinfo[mappoint.x + i][mappoint.y + j].pos = { mappoint.x + i,mappoint.y + j };
+									Map_Layer_1[mappoint.x + i][mappoint.y + j] = mapobject_temp;
+									Map_Layer_1[mappoint.x + i][mappoint.y + j].attr = mapobject_temp.attr;
+									Map_Layer_1[mappoint.x + i][mappoint.y + j].object_type = mapobject_temp.object_type;
+									Map_Layer_1[mappoint.x + i][mappoint.y + j].pos = { mappoint.x + i,mappoint.y + j };
 								}
 						}
 
@@ -222,12 +217,10 @@ void MapManager::MainView(HDC hdc)
 				}
 
 				if (Inputsystem::getInstance().mou_R)
-					mapinfo[mappoint.x + i][mappoint.y + j].MapObject_reset();
+					Map_Layer_1[mappoint.x + i][mappoint.y + j].MapObject_reset();
 			}
-
 		}
 	}
-
 
 
 	if (Inputsystem::getInstance().key_W)
@@ -279,8 +272,10 @@ void MapManager::SubView(HDC hdc)
 
 	const int button_num = 14;
 
+	//int coor[button_num][2] = { {1050, 700}, {1250, 700}, {1450, 700}, {1650, 700}, {1050, 800}, {1250, 800}, {1450, 800}, {1650, 800},
+	//					{1450, 900}, {1450, 1000},{1450, 1100}, {1650, 900}, {1650, 1000}, {1650, 1100} };
 	int coor[button_num][2] = { {1050, 700}, {1250, 700}, {1450, 700}, {1650, 700}, {1050, 800}, {1250, 800}, {1450, 800}, {1650, 800},
-						{1450, 900}, {1450, 1000},{1450, 1100}, {1650, 900}, {1650, 1000}, {1650, 1100} };
+					{1450, 900}, {1450, 950},{1450, 1000}, {1650, 900}, {1650, 950}, {1650, 1000} };
 
 	TCHAR tstr[button_num][100] = { {L"Ship"}, {L"Desert"}, {L"Green"}, {L"Volcano"}, {L"Object_Obstacle"}, {L"Object_Weapon"}, {L"Object_Enemy"}, {L"Object_ETC"},
 	{L"ROAD"}, {L"BLOCK"},{L"SHADOW"}, {L"SAVE"}, {L"LOAD"}, {L"EXIT"} };
@@ -426,10 +421,6 @@ void MapManager::MapObjectView(HDC hdc)
 						submappoint.x = i;
 						submappoint.y = j;
 						mapobject_temp = submap[i][j];
-						mapobject_temp.obstacle_temp = submap[i][j].obstacle_temp;
-						mapobject_temp.item_temp = submap[i][j].item_temp;
-						mapobject_temp.enemy_temp = submap[i][j].enemy_temp;
-						mapobject_temp.type = submap[i][j].type;
 					}
 				}
 			}
@@ -492,13 +483,6 @@ void MapManager::LoadTile(HDC hdc, MapObject_info map, int i, int j)
 
 
 
-
-
-	if (map.Shadow)
-	{
-		LoadTile(hdc, *(map.Shadow), i, j);
-	}
-
 	if (map.attr == MapObject_info::BLOCK)
 	{
 		Pen redpen(Color(255, 255, 0, 0), 5);
@@ -507,47 +491,6 @@ void MapManager::LoadTile(HDC hdc, MapObject_info map, int i, int j)
 
 }
 
-void MapManager::LoadTile(HDC hdc, obstacle_info &o)
-{
-	Graphics g(hdc);
-
-	const int filenum = 1;
-	char path[filenum][100];
-	TCHAR Tpath[filenum][100];
-	Filesystem::getInstance().getpath(o.CSVrow, o.CSVcol, path, filenum);
-	int msglen = MultiByteToWideChar(CP_ACP, 0, path[0], strlen(path[0]), NULL, NULL);
-	MultiByteToWideChar(CP_ACP, 0, path[0], strlen(path[0]), Tpath[0], msglen);
-	Tpath[0][msglen] = NULL;
-
-	Image img(Tpath[0]);
-
-	//Matrix mat;
-	//mat.RotateAt(o.rotation % 360,
-	//	Gdiplus::PointF(i + 50,
-	//		j + 50));
-
-	//g.SetTransform(&mat);
-
-	//g.DrawImage(&img, Rect((o.pos.x - mappoint.x) * 100, (o.pos.y - mappoint.y) * 100 - (o.imgsizecol - 100),
-	//	o.imgsizerow, o.imgsizecol),
-	//	0, 0,
-	//	o.imgsizerow, o.imgsizecol, UnitPixel);
-
-	g.DrawImage(&img, Rect((o.pos.x - mappoint.x) * 100, (o.pos.y - mappoint.y) * 100 - (img.GetHeight() - 100) + 50,
-		img.GetWidth(), img.GetHeight()),
-		0, 0,
-		img.GetWidth(), img.GetHeight(), UnitPixel);
-}
-
-void MapManager::LoadTile(HDC hdc, item_info &i)
-{
-
-}
-
-void MapManager::LoadTile(HDC hdc, enemy_info &e)
-{
-
-}
 
 void MapManager::setship()
 {
@@ -562,7 +505,7 @@ void MapManager::setship()
 			submap[j][i].in_use = true;
 			submap[j][i].col = 2;
 			submap[j][i].row = a++;
-			submap[j][i].type = MapObject_info::TILE;
+			submap[j][i].object_type = MapObject_info::TILE;
 		}
 	}
 
@@ -573,7 +516,7 @@ void MapManager::setship()
 			submap[j][i].in_use = true;
 			submap[j][i].col = 2;
 			submap[j][i].row = a++;
-			submap[j][i].type = MapObject_info::TILE;
+			submap[j][i].object_type = MapObject_info::TILE;
 		}
 
 
@@ -589,7 +532,7 @@ void MapManager::setdesert()
 			submap[j][i].in_use = true;
 			submap[j][i].col = 3;
 			submap[j][i].row = a++;
-			submap[j][i].type = MapObject_info::TILE;
+			submap[j][i].object_type = MapObject_info::TILE;
 		}
 	}
 	for (int i = 4; i < 6; i++)
@@ -597,7 +540,7 @@ void MapManager::setdesert()
 		submap[0][i].in_use = true;
 		submap[0][i].col = 3;
 		submap[0][i].row = a++;
-		submap[0][i].type = MapObject_info::TILE;
+		submap[0][i].object_type = MapObject_info::TILE;
 	}
 
 	for (int i = 0; i < 6; i += 2)
@@ -610,7 +553,7 @@ void MapManager::setdesert()
 			submap[j][i].imgcol = 177;
 			submap[j][i].row = a++;
 
-			submap[j][i].type = MapObject_info::SHADOW;
+			submap[j][i].object_type = MapObject_info::SHADOW;
 		}
 	}
 
@@ -628,7 +571,7 @@ void MapManager::setgreen()
 			submap[j][i].in_use = true;
 			submap[j][i].col = 4;
 			submap[j][i].row = a++;
-			submap[j][i].type = MapObject_info::TILE;
+			submap[j][i].object_type = MapObject_info::TILE;
 		}
 	}
 	for (int i = 4; i < 6; i++)
@@ -636,7 +579,7 @@ void MapManager::setgreen()
 		submap[0][i].in_use = true;
 		submap[0][i].col = 4;
 		submap[0][i].row = a++;
-		submap[0][i].type = MapObject_info::TILE;
+		submap[0][i].object_type = MapObject_info::TILE;
 	}
 
 	for (int i = 0; i < 6; i += 2)
@@ -649,7 +592,7 @@ void MapManager::setgreen()
 			submap[j][i].imgcol = 177;
 			submap[j][i].row = a++;
 
-			submap[j][i].type = MapObject_info::SHADOW;
+			submap[j][i].object_type = MapObject_info::SHADOW;
 		}
 	}
 
@@ -665,7 +608,7 @@ void MapManager::setvolcano()
 			submap[j][i].in_use = true;
 			submap[j][i].col = 5;
 			submap[j][i].row = a++;
-			submap[j][i].type = MapObject_info::TILE;
+			submap[j][i].object_type = MapObject_info::TILE;
 		}
 	}
 	for (int i = 4; i < 6; i++)
@@ -673,7 +616,7 @@ void MapManager::setvolcano()
 		submap[0][i].in_use = true;
 		submap[0][i].col = 5;
 		submap[0][i].row = a++;
-		submap[0][i].type = MapObject_info::TILE;
+		submap[0][i].object_type = MapObject_info::TILE;
 	}
 
 	for (int i = 0; i < 6; i += 2)
@@ -686,40 +629,13 @@ void MapManager::setvolcano()
 			submap[j][i].imgcol = 177;
 			submap[j][i].row = a++;
 
-			submap[j][i].type = MapObject_info::SHADOW;
+			submap[j][i].object_type = MapObject_info::SHADOW;
 		}
 	}
 }
 
 void MapManager::setobstacle()
 {
-	//		const int csvrow = 6;
-	//		const int csvcol = 0;
-	//		const int filenum = 6; 	
-	int a = 0;
-	for(int i =0; i < 6; i+=2)
-		{
-			submap[0][i].in_use = true;
-			submap[0][i].row = 2;
-			submap[0][i].obstacle_temp.type = 0;
-			submap[0][i].obstacle_temp.type = 10;
-			submap[0][i].obstacle_temp.CSVrow = 6;
-			submap[0][i].obstacle_temp.CSVcol = a;
-			submap[0][i].obstacle_temp.imgsizecol = 150;
-			submap[0][i].type = 1;
-		}
-	submap[0][4].obstacle_temp.imgsizerow = 200;
-
-	for (int i = 0; i < 6; i+=2)
-	{
-		submap[2][i].in_use = true;
-		submap[2][i].row = 3;
-		submap[2][i].obstacle_temp.type = 0;
-		submap[2][i].obstacle_temp.type = 11;
-		submap[2][i].obstacle_temp.CSVrow = 6;
-		submap[2][i].obstacle_temp.CSVcol = a;
-		submap[2][i].type = 1;
-	}
 }
 
 void MapManager::setcage()
