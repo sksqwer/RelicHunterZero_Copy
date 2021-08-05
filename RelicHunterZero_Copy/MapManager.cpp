@@ -441,30 +441,24 @@ void MapManager::MapObjectView(HDC hdc)
 
 	time_t start, end;
 	start = clock();
-	
+	Pen blackpen(Color(255, 0, 0, 0), 1);
+	for (int i = 0; i < 10; i++)
+	{
+		g.DrawLine(&blackpen, 1000 + 100 * i, 0, 1000 + 100 * i, 600);
+	}
+
+	for (int i = 0; i < 7; i++)
+	{
+		g.DrawLine(&blackpen, 1000, 100 * i, 1900, 100 * i);
+	}
+
+	Pen redpen(Color(255, 255, 0, 0), 5);
+	g.DrawRectangle(&redpen, Rect(1000 + 100 * submappoint.x, 100 * submappoint.y, 100, 100));
 
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 6; j++)
 		{
-
-			Pen blackpen(Color(255, 0, 0, 0), 1);
-			for (int i = 0; i < 10; i++)
-			{
-				g.DrawLine(&blackpen, 1000 + 100 * i, 0, 1000 + 100 * i, 600);
-			}
-
-			for (int i = 0; i < 7; i++)
-			{
-				g.DrawLine(&blackpen, 1000, 100 * i, 1900, 100 * i);
-			}
-
-
-			Pen redpen(Color(255, 255, 0, 0), 5);
-			g.DrawRectangle(&redpen, Rect(1000 + 100 * submappoint.x, 100 * submappoint.y, 100, 100));
-
-
-
 			if (submap[i][j].in_use)
 			{
 				LoadTile(hdc, &submap[i][j], 1000 + 100 * i, 100 * j);
@@ -504,18 +498,11 @@ void MapManager::MapObjectView(HDC hdc)
 							*mapobject_temp = *dynamic_cast<MapObject_info *>(&submap[i][j]);
 						}
 
-
 					}
 				}
 			}
 		}
-
-
 	}
-	end = clock();
-
-	time_t p = end - start;
-	p = 0;
 }
 
 void MapManager::MapCursor_temp(HDC hdc)
