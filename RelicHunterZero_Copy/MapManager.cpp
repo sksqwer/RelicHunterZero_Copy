@@ -120,10 +120,6 @@ void MapManager::MainView(HDC hdc)
 				LoadTile(hMemDC, &Map_Layer_1[mappoint.x + i][mappoint.y + j], 100 * ( i - mappoint.x), 50 + 100 * (j - mappoint.y));
 				
 			}
-
-			
-			
-
 		}
 	}
 	for (int i = mappoint.x; i < mappoint.x + 10; i++)
@@ -160,6 +156,15 @@ void MapManager::MainView(HDC hdc)
 					{
 						obstacle_info *temp = static_cast<obstacle_info *>(mapobject_temp);
 						(*temp).pos = { mappoint.x + i,mappoint.y + j };
+	//					Map_Layer_1[mappoint.x + i][mappoint.y + j].in_use = true;
+						for(int m = 0; m < temp->block.x; m++)
+							for (int n = 0; n < temp->block.y; n++)
+							{
+								Map_Layer_1[mappoint.x + i + m][mappoint.y + j - n].in_use = true;
+								Map_Layer_1[mappoint.x + i + m][mappoint.y + j - n].attr = MapObject_info::BLOCK;
+								Map_Layer_1[mappoint.x + i + m][mappoint.y + j - n].on_obj = temp->on_obj;
+
+							}
 						GameManager::getInstance().Vobstacle.push_back(*temp);
 
 					}
@@ -236,7 +241,11 @@ void MapManager::MainView(HDC hdc)
 				}
 
 				if (Inputsystem::getInstance().mou_R)
+				{
 					Map_Layer_1[mappoint.x + i][mappoint.y + j].reset();
+					Map_Layer_2[mappoint.x + i][mappoint.y + j].reset();
+
+				}
 			}
 		}
 	}
@@ -452,8 +461,7 @@ void MapManager::MapObjectView(HDC hdc)
 		g.DrawLine(&blackpen, 1000, 100 * i, 1900, 100 * i);
 	}
 
-	Pen redpen(Color(255, 255, 0, 0), 5);
-	g.DrawRectangle(&redpen, Rect(1000 + 100 * submappoint.x, 100 * submappoint.y, 100, 100));
+	
 
 	for (int i = 0; i < 9; i++)
 	{
@@ -477,20 +485,20 @@ void MapManager::MapObjectView(HDC hdc)
 						if (mapobject_temp)
 							delete mapobject_temp;
 
-						if (dynamic_cast<obstacle_info *>(submap[i] + j))
+						if (static_cast<obstacle_info *>(submap[i] + j))
 						{
 							mapobject_temp = new obstacle_info;
-							*mapobject_temp = *dynamic_cast<obstacle_info *>(&submap[i][j]);
+							*mapobject_temp = *static_cast<obstacle_info *>(&submap[i][j]);
 						}
-						else if (dynamic_cast<item_info *>(submap[i] + j))
+						else if (static_cast<item_info *>(submap[i] + j))
 						{
 							mapobject_temp = new item_info;
-							*mapobject_temp = *dynamic_cast<item_info *>(&submap[i][j]);
+							*mapobject_temp = *static_cast<item_info *>(&submap[i][j]);
 						}
-						else if (dynamic_cast<enemy_info *>(submap[i] + j))
+						else if (static_cast<enemy_info *>(submap[i] + j))
 						{
 							mapobject_temp = new enemy_info;
-							*mapobject_temp = *dynamic_cast<enemy_info *>(&submap[i][j]);
+							*mapobject_temp = *static_cast<enemy_info *>(&submap[i][j]);
 						}
 						else 
 						{
@@ -503,6 +511,8 @@ void MapManager::MapObjectView(HDC hdc)
 			}
 		}
 	}
+	Pen redpen(Color(255, 255, 0, 0), 5);
+	g.DrawRectangle(&redpen, Rect(1000 + 100 * submappoint.x, 100 * submappoint.y, 100, 100));
 }
 
 void MapManager::MapCursor_temp(HDC hdc)
@@ -517,6 +527,17 @@ void MapManager::MapCursor_temp(HDC hdc)
 void MapManager::LoadTile(HDC hdc, MapObject_info *map, int i, int j)
 {
 	Graphics g(hdc);
+	if ((*map).row == -1)
+	{
+		if ((*map).attr == MapObject_info::BLOCK)
+		{
+			Pen redpen(Color(255, 255, 0, 0), 5);
+			g.DrawRectangle(&redpen, Rect(i, j, 100, 100));
+		}
+		return;
+	}
+
+
 
 	Matrix mat;
 	mat.RotateAt((*map).rotation % 360,
@@ -524,16 +545,12 @@ void MapManager::LoadTile(HDC hdc, MapObject_info *map, int i, int j)
 			j  + 50));
 
 	g.SetTransform(&mat);
+	Image *temp = returnimagepointer((*map).col, (*map).row);
 
-	Rect rect(i, j, (*map).imgrow, (*map).imgcol);
-	g.DrawImage(returnimagepointer((*map).col, (*map).row), rect,
+	Rect rect(i, j - (temp->GetHeight() - 100), temp->GetWidth(), temp->GetHeight());
+	g.DrawImage(temp, rect,
 		0, 0,
-		(*map).imgrow, (*map).imgcol, UnitPixel);
-
-
-
-
-
+		temp->GetWidth(), temp->GetHeight(), UnitPixel);
 
 
 
@@ -599,14 +616,13 @@ void MapManager::setdesert()
 		submap[0][i].object_type = MapObject_info::TILE;
 	}
 
-	for (int i = 0; i < 6; i += 2)
+	for (int i = 1; i < 6; i += 2)
 	{
 		for (int j = 4; j < 9; j++)
 		{
 			if (a == 28) break;
 			submap[j][i].in_use = true;
 			submap[j][i].col = 3;
-			submap[j][i].imgcol = 177;
 			submap[j][i].row = a++;
 
 			submap[j][i].object_type = MapObject_info::SHADOW;
@@ -639,14 +655,13 @@ void MapManager::setgreen()
 		submap[0][i].object_type = MapObject_info::TILE;
 	}
 
-	for (int i = 0; i < 6; i += 2)
+	for (int i = 1; i < 6; i += 2)
 	{
 		for (int j = 4; j < 9; j++)
 		{
 			if (a == 28) break;
 			submap[j][i].in_use = true;
 			submap[j][i].col = 4;
-			submap[j][i].imgcol = 177;
 			submap[j][i].row = a++;
 
 			submap[j][i].object_type = MapObject_info::SHADOW;
@@ -678,14 +693,13 @@ void MapManager::setvolcano()
 		submap[0][i].object_type = MapObject_info::TILE;
 	}
 
-	for (int i = 0; i < 6; i += 2)
+	for (int i = 1; i < 6; i += 2)
 	{
 		for (int j = 4; j < 9; j++)
 		{
 			if (a == 28) break;
 			submap[j][i].in_use = true;
 			submap[j][i].col = 5;
-			submap[j][i].imgcol = 177;
 			submap[j][i].row = a++;
 
 			submap[j][i].object_type = MapObject_info::SHADOW;
@@ -700,48 +714,53 @@ void MapManager::setobstacle()
 
 
 	temp.in_use = true;
+	temp.on_obj = 1;
 	temp.col = 6;
 	temp.row = a++;
 	temp.object_type = MapObject_info::OBSTACLE;
-	temp.attr = MapObject_info::OBJECT;
-	temp.imgcol = 131;
 
 	temp.obstacle_type = obstacle_info::STATIC;
 	temp.kind = obstacle_info::BOX;
-	submap[0][0] = *dynamic_cast<obstacle_info *>(&temp);
+	submap[0][1] = *dynamic_cast<obstacle_info *>(&temp);
 
 
 	temp.row = a++;
-	temp.imgcol = 150;
-	submap[0][2] = *dynamic_cast<obstacle_info *>(&temp);
+	submap[0][3] = *dynamic_cast<obstacle_info *>(&temp);
 
 
 	temp.row = a++;
-	temp.imgrow = 200;
-	temp.imgcol = 150;
-	submap[0][4] = *dynamic_cast<obstacle_info *>(&temp);
+	temp.block = {2, 1};
+	submap[0][5] = *dynamic_cast<obstacle_info *>(&temp);
 
 	temp.row = a++;
-	temp.imgrow = 230;
-	temp.imgcol = 100;
 	temp.kind = obstacle_info::ROOT;
-	submap[2][0] = *dynamic_cast<obstacle_info *>(&temp);
+	submap[2][1] = *dynamic_cast<obstacle_info *>(&temp);
 
 	temp.row = a++;
-	temp.imgrow = 235;
-	temp.imgcol = 100;
-	submap[2][2] = *dynamic_cast<obstacle_info *>(&temp);
+	submap[2][3] = *dynamic_cast<obstacle_info *>(&temp);
 
 	temp.row = a++;
-	temp.imgrow = 279;
-	temp.imgcol = 200;
+	temp.block = { 3, 2 };
 	submap[5][1] = *dynamic_cast<obstacle_info *>(&temp);
 
 }
 
 void MapManager::setcage()
 {
+	int a = 0;
+	obstacle_info temp;
 
+
+	temp.in_use = true;
+	temp.col = 7;
+
+	temp.row = a++;
+	temp.object_type = MapObject_info::OBSTACLE;
+	temp.framelimit = 12;
+
+	temp.obstacle_type = obstacle_info::ANIMATION;
+	temp.kind = obstacle_info::CAGE;
+	submap[5][3] = *dynamic_cast<obstacle_info *>(&temp);
 }
 
 void MapManager::setweapon()

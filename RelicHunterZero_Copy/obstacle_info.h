@@ -12,6 +12,7 @@ public:
 	enum { BOX = 30, ROOT = 31, CAGE = 32 }; // kind
 	int obstacle_type = 20;
 	int kind = 30;
+	POINT block = { 1, 1 };
 	int framelimit = 0;
 };
 
