@@ -10,7 +10,6 @@ void GameManager::Init()
 
 void GameManager::ShutDown()
 {
-	GDI_ShutDown();
 
 	for (int i = 0; i < sizeof(menu) / sizeof(Image *); i++)
 	{
@@ -47,6 +46,14 @@ void GameManager::ShutDown()
 		if (volcano[i])
 			delete volcano[i];
 	}
+
+	for (int i = 0; i < sizeof(obstacle) / sizeof(Image *); i++)
+	{
+		if (obstacle[i] != nullptr)
+			delete obstacle[i];
+	}
+
+	GDI_ShutDown();
 //	delete[] obstacle;
 }
 
@@ -77,11 +84,11 @@ void GameManager::update()
 
 void GameManager::show()
 {
-	/*
+	
 	DWORD newTime = GetTickCount();
 	static DWORD oldTime = newTime;
-	if (newTime - oldTime < 40) return;
-	oldTime = newTime;*/
+	if (newTime - oldTime < 30) return;
+	oldTime = newTime;
 
 
 	ScreenManager::getInstance().Screen();
@@ -215,4 +222,19 @@ void GameManager::load_vocano()
 
 void GameManager::load_obstacle()
 {
+	const int CSVrow = 6;
+	const int CSVcol = 0;
+	const int filenum = sizeof(obstacle) / sizeof(Image*);
+	char path[filenum][100];
+	TCHAR Tpath[filenum][100];
+
+	for (int i = 0; i < filenum; i++)
+	{
+		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
+		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
+		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
+		Tpath[i][msglen] = NULL;
+
+		obstacle[i] = Gdiplus::Image::FromFile(Tpath[i]);
+	}
 }

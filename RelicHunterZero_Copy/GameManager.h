@@ -7,6 +7,10 @@
 #include "ScreenManager.h"
 #include "Filesystem.h"
 #include "Inputsystem.h"
+#include "MapObject_info.h"
+#include "obstacle_info.h"
+#include "Item_info.h"
+#include "enemy_info.h"
 
 
 class GameManager
@@ -24,13 +28,12 @@ public:
 	Image *desert[28] = { nullptr };
 	Image *green[28] = { nullptr };
 	Image *volcano[28] = { nullptr };
-//	Image *obstacle[6] = { nullptr };
-//	Image *menu;
-//	Image *maptoggle;
-//	Image *ship;
-//	Image *desert;
-//	Image *green;
-//	Image *volcano;
+	Image *obstacle[6] = { nullptr };
+	// objectvector
+	std::vector<obstacle_info> Vobstacle;
+	std::vector<item_info> Vitem;
+	std::vector<enemy_info> Venemy;
+
 
 	//singleton
 	GameManager() {}

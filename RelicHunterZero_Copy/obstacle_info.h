@@ -8,10 +8,10 @@
 class obstacle_info : public MapObject_info
 {
 public:
-	enum { STATIC = 20, ANIMATION = 21 };
-	enum { BOX = 30, ROOT = 31, CAGE = 32 };
-	int obstacle_type = 0;
-	int kind = 10;
+	enum { STATIC = 20, ANIMATION = 21 }; // obstacle_type
+	enum { BOX = 30, ROOT = 31, CAGE = 32 }; // kind
+	int obstacle_type = 20;
+	int kind = 30;
 	int framelimit = 0;
 };
 

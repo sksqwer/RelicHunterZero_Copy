@@ -138,7 +138,10 @@ void ScreenManager::MainMenu()
 		DoubleBufferingimage(hMemDC, (GameManager::getInstance().menu)[5], toggle_x * 4 + 1400 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 500 - bg_tile_y);
 		DoubleBufferingtext(hMemDC, _T("EXIT"), 50 + 500 - bg_tile_x, toggle_y + toggle_y_interval * 3 + 10 + 500 - bg_tile_y, 580, 60, 30, Color(255, 255, 0, 0));
 		if (Inputsystem::getInstance().mou_L)
+		{
+			GameManager::getInstance().ShutDown();
 			exit(0);
+		}
 	}
 	SetCursor(hMemDC, 500 - bg_tile_x, 500 - bg_tile_y, 0);
 

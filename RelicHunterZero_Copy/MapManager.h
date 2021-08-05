@@ -14,8 +14,8 @@ private:
 	POINT submappoint = { 0, 0 };
 	MapObject_info **Map_Layer_1 = NULL;
 	MapObject_info **Map_Layer_2 = NULL;
-	MapObject_info submap[9][6];
-	MapObject_info mapobject_temp;
+	MapObject_info **submap;
+	MapObject_info *mapobject_temp;
 	int map_flag = 0;
 	Graphics *g;
 
@@ -37,7 +37,7 @@ public:
 	void MapObjectView(HDC hdc);
 	void MapCursor_temp(HDC hdc);
 	//
-	void LoadTile(HDC hdc, MapObject_info map, int i, int j);
+	void LoadTile(HDC hdc, MapObject_info *map, int i, int j);
 	//set submap
 	void setship();
 	void setdesert();

@@ -21,14 +21,17 @@ public:
 	int imgcol = 100;
 	int rotation = 0;
 	//
-	void MapObject_reset()
+	virtual void reset()
 	{
 		in_use = false;
 		on_obj = 0;
 		pos = { 0, 0 };
+		col = 0;
+		row = 0;
 		object_type = 0;
 		imgrow = 100;
 		imgcol = 100;
+		rotation = 0;
 		attr = 10;
 	}
 };
