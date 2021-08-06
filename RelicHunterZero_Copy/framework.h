@@ -25,6 +25,8 @@
 #include <ctime>
 #include<fstream>
 #include <atlbase.h> 
+#include <Commdlg.h>
+#include <iostream>
 
 //
 

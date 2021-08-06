@@ -8,6 +8,7 @@
 class obstacle_info : public MapObject_info
 {
 public:
+	obstacle_info() : MapObject_info(MapObject_info::OBSTACLE) {}
 	enum { STATIC = 20, ANIMATION = 21 }; // obstacle_type
 	enum { BOX = 30, ROOT = 31, CAGE = 32 }; // kind
 	int obstacle_type = 20;

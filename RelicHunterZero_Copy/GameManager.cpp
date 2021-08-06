@@ -10,48 +10,28 @@ void GameManager::Init()
 
 void GameManager::ShutDown()
 {
+	shutdown_image_func(menu);
+	shutdown_image_func(maptoggle);
+	shutdown_image_func(ship);
+	shutdown_image_func(green);
+	shutdown_image_func(desert);
+	shutdown_image_func(volcano);
+	shutdown_image_func(obstacle);
+	shutdown_image_func(obstacle_cage);
+	shutdown_image_func(item);
+	shutdown_image_func(duck1_idle);
+	shutdown_image_func(duck2_idle);
+	shutdown_image_func(duck3_idle);
+	shutdown_image_func(kamikaze1_idle);
+	shutdown_image_func(kamikaze2_idle);
+	shutdown_image_func(turtle1_idle);
+	shutdown_image_func(turtle2_idle);
+	shutdown_image_func(turtle3_idle);
+	shutdown_image_func(boss_idle);
 
-	for (int i = 0; i < sizeof(menu) / sizeof(Image *); i++)
-	{
-		if(menu[i] != nullptr)
-			delete menu[i];
-	}
 
-	for (int i = 0; i < sizeof(maptoggle) / sizeof(Image *); i++)
-	{
-		if (maptoggle[i])
-			delete maptoggle[i];
-	}
 
-	for (int i = 0; i < sizeof(ship) / sizeof(Image *); i++)
-	{
-		if (ship[i])
-			delete ship[i];
-	}
 
-	for (int i = 0; i < sizeof(green) / sizeof(Image *); i++)
-	{
-		if (green[i])
-			delete green[i];
-	}
-
-	for (int i = 0; i < sizeof(desert) / sizeof(Image *); i++)
-	{
-		if (desert[i])
-			delete desert[i];
-	}
-
-	for (int i = 0; i < sizeof(volcano) / sizeof(Image *); i++)
-	{
-		if (volcano[i])
-			delete volcano[i];
-	}
-
-	for (int i = 0; i < sizeof(obstacle) / sizeof(Image *); i++)
-	{
-		if (obstacle[i] != nullptr)
-			delete obstacle[i];
-	}
 
 	GDI_ShutDown();
 //	delete[] obstacle;
@@ -103,6 +83,9 @@ void GameManager::Load_Image()
 	load_desert();
 	load_vocano();
 	load_obstacle();
+	load_obstacle_cage();
+	load_item();
+	load_enemy_idle();
 }
 
 void GameManager::load_menu()
@@ -146,87 +129,58 @@ void GameManager::load_maptoggle()
 
 void GameManager::load_ship()
 {
-	const int CSVrow = 2;
-	const int CSVcol = 0;
-	const int filenum = sizeof(ship) / sizeof(Image*);
-	char path[filenum][100];
-	TCHAR Tpath[filenum][100];
-
-	for (int i = 0; i < filenum; i++)
-	{
-		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
-		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
-		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
-		Tpath[i][msglen] = NULL;
-
-		ship[i] = Gdiplus::Image::FromFile(Tpath[i]);
-	}
+	load_image_func(2, 0, sizeof(ship) / sizeof(Image*), ship);
 }
 
 void GameManager::load_desert()
 {
-	const int CSVrow = 3;
-	const int CSVcol = 0;
-	const int filenum = sizeof(desert) / sizeof(Image*);
-	char path[filenum][100];
-	TCHAR Tpath[filenum][100];
-
-	for (int i = 0; i < filenum; i++)
-	{
-		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
-		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
-		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
-		Tpath[i][msglen] = NULL;
-
-		desert[i] = Gdiplus::Image::FromFile(Tpath[i]);
-	}
+	load_image_func(3, 0, sizeof(desert) / sizeof(Image*), desert);
 }
 
 void GameManager::load_green()
 {
-	const int CSVrow = 4;
-	const int CSVcol = 0;
-	const int filenum = sizeof(green) / sizeof(Image*);
-	char path[filenum][100];
-	TCHAR Tpath[filenum][100];
-
-	for (int i = 0; i < filenum; i++)
-	{
-		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
-		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
-		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
-		Tpath[i][msglen] = NULL;
-
-		green[i] = Gdiplus::Image::FromFile(Tpath[i]);
-	}
+	load_image_func(4, 0, sizeof(green) / sizeof(Image*), green);
 }
 
 void GameManager::load_vocano()
 {
-	const int CSVrow = 5;
-	const int CSVcol = 0;
-	const int filenum = sizeof(volcano) / sizeof(Image*);
-	char path[filenum][100];
-	TCHAR Tpath[filenum][100];
-
-	for (int i = 0; i < filenum; i++)
-	{
-		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
-		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
-		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
-		Tpath[i][msglen] = NULL;
-
-		volcano[i] = Gdiplus::Image::FromFile(Tpath[i]);
-	}
+	load_image_func(5, 0, sizeof(volcano) / sizeof(Image*), volcano);
 }
 
 void GameManager::load_obstacle()
 {
-	const int CSVrow = 6;
-	const int CSVcol = 0;
-	const int filenum = sizeof(obstacle) / sizeof(Image*);
-	char path[filenum][100];
-	TCHAR Tpath[filenum][100];
+	load_image_func(6, 0, sizeof(obstacle) / sizeof(Image*), obstacle);
+}
+
+void GameManager::load_obstacle_cage()
+{
+	load_image_func(7, 0, sizeof(obstacle_cage) / sizeof(Image*), obstacle_cage);
+	
+}
+
+void GameManager::load_item()
+{
+	load_image_func(8, 0, sizeof(item) / sizeof(Image*), item);
+}
+
+void GameManager::load_enemy_idle()
+{
+	int a = 9;
+	load_image_func(a++, 0, sizeof(duck1_idle) / sizeof(Image*), duck1_idle);
+	load_image_func(a++, 0, sizeof(duck2_idle) / sizeof(Image*), duck2_idle);
+	load_image_func(a++, 0, sizeof(duck3_idle) / sizeof(Image*), duck3_idle);
+	load_image_func(a++, 0, sizeof(kamikaze1_idle) / sizeof(Image*), kamikaze1_idle);
+	load_image_func(a++, 0, sizeof(kamikaze2_idle) / sizeof(Image*), kamikaze2_idle);
+	load_image_func(a++, 0, sizeof(turtle1_idle) / sizeof(Image*), turtle1_idle);
+	load_image_func(a++, 0, sizeof(turtle2_idle) / sizeof(Image*), turtle2_idle);
+	load_image_func(a++, 0, sizeof(turtle3_idle) / sizeof(Image*), turtle3_idle);
+	load_image_func(a++, 0, sizeof(boss_idle) / sizeof(Image*), boss_idle);
+}
+
+void GameManager::load_image_func(const int CSVrow, const int CSVcol, const int filenum, Image **img)
+{
+	char path[30][100];
+	TCHAR Tpath[30][100];
 
 	for (int i = 0; i < filenum; i++)
 	{
@@ -235,6 +189,15 @@ void GameManager::load_obstacle()
 		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
 		Tpath[i][msglen] = NULL;
 
-		obstacle[i] = Gdiplus::Image::FromFile(Tpath[i]);
+		img[i] = Gdiplus::Image::FromFile(Tpath[i]);
+	}
+}
+
+void GameManager::shutdown_image_func(Image ** img)
+{
+	for (int i = 0; i < sizeof(img) / sizeof(Image *); i++)
+	{
+		if (img[i])
+			delete img[i];
 	}
 }

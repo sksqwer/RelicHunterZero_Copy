@@ -29,6 +29,17 @@ public:
 	Image *green[28] = { nullptr };
 	Image *volcano[28] = { nullptr };
 	Image *obstacle[6] = { nullptr };
+	Image *obstacle_cage[12] = { nullptr };
+	Image *item[13] = { nullptr };
+	Image *duck1_idle[7] = { nullptr };
+	Image *duck2_idle[7] = { nullptr };
+	Image *duck3_idle[10] = { nullptr };
+	Image *kamikaze1_idle[16] = { nullptr };
+	Image *kamikaze2_idle[16] = { nullptr };
+	Image *turtle1_idle[12] = { nullptr };
+	Image *turtle2_idle[12] = { nullptr };
+	Image *turtle3_idle[14] = { nullptr };
+	Image *boss_idle[14] = { nullptr };
 	// objectvector
 	std::vector<obstacle_info> Vobstacle;
 	std::vector<item_info> Vitem;
@@ -63,6 +74,11 @@ public:
 	void load_green();
 	void load_vocano();
 	void load_obstacle();
+	void load_obstacle_cage();
+	void load_item();
+	void load_enemy_idle();
+	void load_image_func(const int CSVrow, const int CSVcol, const int filenum, Image **img);
+	void shutdown_image_func(Image **img);
 
 };
 
