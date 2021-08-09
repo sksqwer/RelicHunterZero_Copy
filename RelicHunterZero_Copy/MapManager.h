@@ -24,7 +24,9 @@ private:
 	item_info item_temp[9][6];
 	enemy_info enemy_temp[9][6];
 	int map_flag = 0;
-	Graphics *g;
+	std::vector<obstacle_info> Vobstacle;
+	std::vector<item_info> Vitem;
+	std::vector<enemy_info> Venemy;
 
 
 
@@ -44,7 +46,7 @@ public:
 	void MapObjectView(HDC hdc);
 	void MapCursor_temp(HDC hdc);
 	//
-	void LoadTile(HDC hdc, MapObject_info *map, int i, int j);
+	void LoadTile(HDC hdc, MapObject_info *map, int i, int j, bool is_mapedit);
 	//set submap
 	void setship();
 	void setdesert();
@@ -56,10 +58,9 @@ public:
 	void setenemy();
 	void setetc();
 	//
-	Image *returnimagepointer(int n, int m);
-	//
 	void save_map();
-	void load_map();
+	void load_map(MapObject_info **, MapObject_info **, std::vector<obstacle_info>, std::vector<item_info>, std::vector<enemy_info>);
+	void load_map(MapObject_info **, MapObject_info **, std::vector<obstacle_info>, std::vector<item_info>, std::vector<enemy_info>, const char*);
 
 };
 

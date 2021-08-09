@@ -14,7 +14,7 @@ public:
 	~Filesystem() {}
 	static Filesystem& getInstance() { static Filesystem Fs; return Fs; }
 	//
-	void getpath(int row, int col, char path[][100], int n);
+	void getpath(int row, int col, char path[][200], int n);
 	void csv_read_row(char *ch, std::istream &infile, char delimiter);
 
 

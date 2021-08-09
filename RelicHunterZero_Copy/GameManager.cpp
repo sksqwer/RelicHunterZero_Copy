@@ -28,8 +28,16 @@ void GameManager::ShutDown()
 	shutdown_image_func(turtle2_idle);
 	shutdown_image_func(turtle3_idle);
 	shutdown_image_func(boss_idle);
-
-
+	shutdown_image_func(bigwindow);
+	shutdown_image_func(etc);
+	shutdown_image_func(bigwindow_reflection);
+	shutdown_image_func(holo_Jimmy);
+	shutdown_image_func(holo_Pinky);
+	shutdown_image_func(holo_Biu);
+	shutdown_image_func(holo_Punny);
+	shutdown_image_func(holo_Raff);
+	shutdown_image_func(Keytutorial);
+	shutdown_image_func(NPC_ass);
 
 
 
@@ -52,10 +60,10 @@ void GameManager::GDI_ShutDown()
 
 void GameManager::update()
 {
-	DWORD newTime = GetTickCount();
-	static DWORD oldTime = newTime;
-	if (newTime - oldTime < 30) return;
-	oldTime = newTime;
+	//	DWORD newTime = GetTickCount();
+	//	static DWORD oldTime = newTime;
+	//	if (newTime - oldTime < 30) return;
+	//	oldTime = newTime;
 
 	GetCursorPos(&mouse);
 
@@ -65,107 +73,46 @@ void GameManager::update()
 void GameManager::show()
 {
 	
-	DWORD newTime = GetTickCount();
-	static DWORD oldTime = newTime;
-	if (newTime - oldTime < 30) return;
-	oldTime = newTime;
+//	DWORD newTime = GetTickCount();
+//	static DWORD oldTime = newTime;
+//	if (newTime - oldTime < 30) return;
+//	oldTime = newTime;
 
 
 	ScreenManager::getInstance().Screen();
 }
 
+void GameManager::show_FPS(HDC hdc)
+{
+
+	TCHAR FPS[100];
+	DWORD num;
+	DWORD newTime = GetTickCount();
+	static DWORD oldTime = newTime;
+	if (oldTime != newTime)
+		num = DWORD(1000) / (newTime - oldTime);
+	else
+		num = DWORD(144);
+	_stprintf_s(FPS, _T("F P S : %lu"), num);
+
+
+	ScreenManager::getInstance().DoubleBufferingtext(hdc, FPS, 1, 1, 100, 20, 12, Color(255, 255, 255, 255),2);
+	oldTime = newTime;
+}
+
 void GameManager::Load_Image()
 {
-	load_menu();
-	load_maptoggle();
-	load_ship();
-	load_green();
-	load_desert();
-	load_vocano();
-	load_obstacle();
-	load_obstacle_cage();
-	load_item();
-	load_enemy_idle();
-}
 
-void GameManager::load_menu()
-{
-	const int CSVrow = 0;
-	const int CSVcol = 0;
-	const int filenum = sizeof(menu) / sizeof(Image*);
-	char path[filenum][100];
-	TCHAR Tpath[filenum][100];
-
-
-	for (int i = 0; i < filenum; i++)
-	{
-		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
-		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
-		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
-		Tpath[i][msglen] = NULL;
-
-		menu[i] = Gdiplus::Image::FromFile(Tpath[i]);
-	}
-}
-
-void GameManager::load_maptoggle()
-{
-	const int CSVrow = 1;
-	const int CSVcol = 0;
-	const int filenum = sizeof(maptoggle) / sizeof(Image*);
-	char path[filenum][100];
-	TCHAR Tpath[filenum][100];
-
-	for (int i = 0; i < filenum; i++)
-	{
-		Filesystem::getInstance().getpath(CSVrow, CSVcol, path, filenum);
-		int msglen = MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), NULL, NULL);
-		MultiByteToWideChar(CP_ACP, 0, path[i], strlen(path[i]), Tpath[i], msglen);
-		Tpath[i][msglen] = NULL;
-
-		maptoggle[i] = Gdiplus::Image::FromFile(Tpath[i]);
-	}
-}
-
-void GameManager::load_ship()
-{
-	load_image_func(2, 0, sizeof(ship) / sizeof(Image*), ship);
-}
-
-void GameManager::load_desert()
-{
-	load_image_func(3, 0, sizeof(desert) / sizeof(Image*), desert);
-}
-
-void GameManager::load_green()
-{
-	load_image_func(4, 0, sizeof(green) / sizeof(Image*), green);
-}
-
-void GameManager::load_vocano()
-{
-	load_image_func(5, 0, sizeof(volcano) / sizeof(Image*), volcano);
-}
-
-void GameManager::load_obstacle()
-{
-	load_image_func(6, 0, sizeof(obstacle) / sizeof(Image*), obstacle);
-}
-
-void GameManager::load_obstacle_cage()
-{
-	load_image_func(7, 0, sizeof(obstacle_cage) / sizeof(Image*), obstacle_cage);
-	
-}
-
-void GameManager::load_item()
-{
-	load_image_func(8, 0, sizeof(item) / sizeof(Image*), item);
-}
-
-void GameManager::load_enemy_idle()
-{
-	int a = 9;
+	int a = 0;
+	load_image_func(a++, 0, sizeof(menu) / sizeof(Image*), menu);
+	load_image_func(a++, 0, sizeof(maptoggle) / sizeof(Image*), maptoggle);
+	load_image_func(a++, 0, sizeof(ship) / sizeof(Image*), ship);
+	load_image_func(a++, 0, sizeof(desert) / sizeof(Image*), desert); 
+	load_image_func(a++, 0, sizeof(green) / sizeof(Image*), green);
+	load_image_func(a++, 0, sizeof(volcano) / sizeof(Image*), volcano);
+	load_image_func(a++, 0, sizeof(obstacle) / sizeof(Image*), obstacle);
+	load_image_func(a++, 0, sizeof(obstacle_cage) / sizeof(Image*), obstacle_cage);
+	load_image_func(a++, 0, sizeof(item) / sizeof(Image*), item);
 	load_image_func(a++, 0, sizeof(duck1_idle) / sizeof(Image*), duck1_idle);
 	load_image_func(a++, 0, sizeof(duck2_idle) / sizeof(Image*), duck2_idle);
 	load_image_func(a++, 0, sizeof(duck3_idle) / sizeof(Image*), duck3_idle);
@@ -175,12 +122,29 @@ void GameManager::load_enemy_idle()
 	load_image_func(a++, 0, sizeof(turtle2_idle) / sizeof(Image*), turtle2_idle);
 	load_image_func(a++, 0, sizeof(turtle3_idle) / sizeof(Image*), turtle3_idle);
 	load_image_func(a++, 0, sizeof(boss_idle) / sizeof(Image*), boss_idle);
+	load_image_func(a++, 0, sizeof(char_sel_toggle) / sizeof(Image*), char_sel_toggle);
+	load_image_func(a++, 0, sizeof(char_sel_unselected) / sizeof(Image*), char_sel_unselected);
+	load_image_func(a++, 0, sizeof(char_sel_stat) / sizeof(Image*), char_sel_stat);
+	load_image_func(a++, 0, sizeof(char_sel_jimmy) / sizeof(Image*), char_sel_jimmy);
+	load_image_func(a++, 0, sizeof(char_sel_jimmy_sel) / sizeof(Image*), char_sel_jimmy_sel);
+	load_image_func(a++, 0, sizeof(bigwindow) / sizeof(Image*), bigwindow);
+	load_image_func(a++, 0, sizeof(etc) / sizeof(Image*), etc);
+	load_image_func(a++, 0, sizeof(bigwindow_reflection) / sizeof(Image*), bigwindow_reflection);
+	load_image_func(a++, 0, sizeof(holo_Jimmy) / sizeof(Image*), holo_Jimmy);
+	load_image_func(a++, 0, sizeof(holo_Pinky) / sizeof(Image*), holo_Pinky);
+	load_image_func(a++, 0, sizeof(holo_Biu) / sizeof(Image*), holo_Biu);
+	load_image_func(a++, 0, sizeof(holo_Punny) / sizeof(Image*), holo_Punny);
+	load_image_func(a++, 0, sizeof(holo_Raff) / sizeof(Image*), holo_Raff);
+	load_image_func(a++, 0, sizeof(Keytutorial) / sizeof(Image*), Keytutorial);
+	load_image_func(a++, 0, sizeof(NPC_ass) / sizeof(Image*), NPC_ass);
+
+
 }
 
 void GameManager::load_image_func(const int CSVrow, const int CSVcol, const int filenum, Image **img)
 {
-	char path[30][100];
-	TCHAR Tpath[30][100];
+	char path[100][200];
+	TCHAR Tpath[100][200];
 
 	for (int i = 0; i < filenum; i++)
 	{
@@ -193,11 +157,87 @@ void GameManager::load_image_func(const int CSVrow, const int CSVcol, const int 
 	}
 }
 
-void GameManager::shutdown_image_func(Image ** img)
+void GameManager::shutdown_image_func(Image **img)
 {
 	for (int i = 0; i < sizeof(img) / sizeof(Image *); i++)
 	{
 		if (img[i])
 			delete img[i];
 	}
+}
+
+Image * GameManager::returnimagepointer(int n, int m)
+{
+	switch (n)
+	{
+	case 0:
+		return (GameManager::getInstance().menu)[m];
+	case 1:
+		return (GameManager::getInstance().maptoggle)[m];
+	case 2:
+		return (GameManager::getInstance().ship)[m];
+	case 3:
+		return (GameManager::getInstance().desert)[m];
+	case 4:
+		return (GameManager::getInstance().green)[m];
+	case 5:
+		return (GameManager::getInstance().volcano)[m];
+	case 6:
+		return (GameManager::getInstance().obstacle)[m];
+	case 7:
+		return (GameManager::getInstance().obstacle_cage)[m];
+	case 8:
+		return (GameManager::getInstance().item)[m];
+	case 9:
+		return (GameManager::getInstance().duck1_idle)[m];
+	case 10:
+		return (GameManager::getInstance().duck2_idle)[m];
+	case 11:
+		return (GameManager::getInstance().duck3_idle)[m];
+	case 12:
+		return (GameManager::getInstance().kamikaze1_idle)[m];
+	case 13:
+		return (GameManager::getInstance().kamikaze2_idle)[m];
+	case 14:
+		return (GameManager::getInstance().turtle1_idle)[m];
+	case 15:
+		return (GameManager::getInstance().turtle2_idle)[m];
+	case 16:
+		return (GameManager::getInstance().turtle3_idle)[m];
+	case 17:
+		return (GameManager::getInstance().boss_idle)[m];
+	case 18:
+		return (GameManager::getInstance().char_sel_toggle)[m];
+	case 19:
+		return (GameManager::getInstance().char_sel_unselected)[m];
+	case 20:
+		return (GameManager::getInstance().char_sel_stat)[m];
+	case 21:
+		return (GameManager::getInstance().char_sel_jimmy)[m];
+	case 22:
+		return (GameManager::getInstance().char_sel_jimmy_sel)[m];
+	case 23:
+		return (GameManager::getInstance().bigwindow)[m];
+	case 24:
+		return (GameManager::getInstance().etc)[m];
+	case 25:
+		return (GameManager::getInstance().bigwindow_reflection)[m];
+	case 26:
+		return (GameManager::getInstance().holo_Jimmy)[m];
+	case 27:
+		return (GameManager::getInstance().holo_Pinky)[m];
+	case 28:
+		return (GameManager::getInstance().holo_Biu)[m];
+	case 29:
+		return (GameManager::getInstance().holo_Punny)[m];
+	case 30:
+		return (GameManager::getInstance().holo_Raff)[m];
+	case 31:
+		return (GameManager::getInstance().Keytutorial)[m];
+	case 32:
+		return (GameManager::getInstance().NPC_ass)[m];
+
+
+	}
+	return nullptr;
 }

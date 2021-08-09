@@ -27,6 +27,7 @@
 #include <atlbase.h> 
 #include <Commdlg.h>
 #include <iostream>
+#include <stdio.h>
 
 //
 

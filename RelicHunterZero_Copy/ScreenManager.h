@@ -22,9 +22,10 @@ public:
 	//
 	void Screen();
 	void MainMenu();
+	void char_sel();
 	void DoubleBufferingimage(HDC hdc, Image *, int x, int y);
-	void DoubleBufferingtile(HDC hdc, Image *, int x, int y, int cx, int  cy);
-	void DoubleBufferingtext(HDC hdc, const TCHAR *, int x, int y, int r, int b, int size, Color);
+	void DoubleBufferingtile(HDC hdc, Image * img, int bx, int  by);
+	void DoubleBufferingtext(HDC hdc, const TCHAR *, int x, int y, int r, int b, int size, Color, int kind);
 	void SetCursor(HDC hdc, int x, int y, int i);
 };
 

@@ -2,7 +2,7 @@
 #include "framework.h"
 #include "FileSystem.h"
 
-void Filesystem::getpath(int row, int col, char path[][100], int n)
+void Filesystem::getpath(int row, int col, char path[][200], int n)
 {
 	std::ifstream infile(csvpath);
 

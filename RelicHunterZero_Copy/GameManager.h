@@ -40,10 +40,22 @@ public:
 	Image *turtle2_idle[12] = { nullptr };
 	Image *turtle3_idle[14] = { nullptr };
 	Image *boss_idle[14] = { nullptr };
+	Image *char_sel_toggle[9] = { nullptr };
+	Image *char_sel_unselected[5] = { nullptr };
+	Image *char_sel_stat[5] = { nullptr };
+	Image *char_sel_jimmy[3] = { nullptr };
+	Image *char_sel_jimmy_sel[20] = { nullptr };
+	Image *bigwindow[60] = { nullptr };
+	Image *etc[8] = { nullptr };
+	Image *bigwindow_reflection[60] = { nullptr };
+	Image *holo_Jimmy[27] = { nullptr };
+	Image *holo_Pinky[27] = { nullptr };
+	Image *holo_Biu[27] = { nullptr };
+	Image *holo_Punny[27] = { nullptr };
+	Image *holo_Raff[27] = { nullptr };
+	Image *Keytutorial[26] = { nullptr };
+	Image *NPC_ass[10] = { nullptr };
 	// objectvector
-	std::vector<obstacle_info> Vobstacle;
-	std::vector<item_info> Vitem;
-	std::vector<enemy_info> Venemy;
 
 
 	//singleton
@@ -65,20 +77,13 @@ public:
 	void GDI_ShutDown();
 	void update();
 	void show();
+	void show_FPS(HDC hdc);
+	//
 	void Load_Image();
-	//Imageload
-	void load_menu();
-	void load_maptoggle();
-	void load_ship();
-	void load_desert();
-	void load_green();
-	void load_vocano();
-	void load_obstacle();
-	void load_obstacle_cage();
-	void load_item();
-	void load_enemy_idle();
+	//
 	void load_image_func(const int CSVrow, const int CSVcol, const int filenum, Image **img);
 	void shutdown_image_func(Image **img);
+	Image *returnimagepointer(int n, int m);
 
 };
 
