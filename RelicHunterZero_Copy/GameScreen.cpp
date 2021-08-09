@@ -37,7 +37,10 @@ void GameScreen::shutdown()
 void GameScreen::TotalGameview()
 {
 	HDC hdc = GetDC(g_hWnd);
+	RECT rect;
+//	GetWindowRect(g_hWnd, &rect);
 	POINT size = GameManager::getInstance().getsize();
+//	POINT size = {rect.right, rect.bottom};
 	int bx = size.x + 400, by = size.y + 400;
 
 	HDC hMemDC = CreateCompatibleDC(hdc);
@@ -47,8 +50,6 @@ void GameScreen::TotalGameview()
 	Graphics g(hMemDC);
 
 
-	ScreenManager::getInstance().SetCursor(hMemDC, 0, 0, 0);
-
 
 	MapView(hMemDC);
 
@@ -56,9 +57,12 @@ void GameScreen::TotalGameview()
 	if (Inputsystem::getInstance().mou_L)
 		GameManager::getInstance().setScreenflag(1);
 
-	GameManager::getInstance().show_FPS(hMemDC);
+	GameManager::getInstance().show_FPS(hMemDC, mapinpoint.x, mapinpoint.y);
+
+	ScreenManager::getInstance().SetCursor(hMemDC, mapinpoint.x, mapinpoint.y, 0);
 
 	BitBlt(hdc, 0, 0, size.x, size.y, hMemDC, mapinpoint.x, mapinpoint.y, SRCCOPY);
+//	BitBlt(hdc, 0, 0, size.x, size.y, hMemDC, mapinpoint.x, mapinpoint.y, SRCCOPY);
 //	BitBlt(hdc, 0, 0, size.x, size.y, hMemDC, 0, 0, SRCCOPY);
 
 	SelectObject(hMemDC, hOldBitmap);
@@ -71,8 +75,8 @@ void GameScreen::TotalGameview()
 
 void GameScreen::MapView(HDC hdc)
 {
-	for(int i = mapoutpoint.x; i < mapoutpoint.x + 14; i++)
-		for (int j = mapoutpoint.y; j < mapoutpoint.y + 14; j++)
+	for(int i = mapoutpoint.x; i < mapoutpoint.x + 23; i++)
+		for (int j = mapoutpoint.y; j < mapoutpoint.y + 15; j++)
 		{
 			if (Map_Layer_1[i][j].in_use)
 			{
@@ -81,8 +85,8 @@ void GameScreen::MapView(HDC hdc)
 			}
 		}
 
-	for (int i = mapoutpoint.x; i < mapoutpoint.x + 14; i++)
-		for (int j = mapoutpoint.y; j < mapoutpoint.y + 14; j++)
+	for (int i = mapoutpoint.x; i < mapoutpoint.x + 23; i++)
+		for (int j = mapoutpoint.y; j < mapoutpoint.y + 15; j++)
 		{
 			if (Map_Layer_2[i][j].in_use)
 			{

@@ -60,7 +60,7 @@ public:
 	//
 	void save_map();
 	void load_map(MapObject_info **, MapObject_info **, std::vector<obstacle_info>, std::vector<item_info>, std::vector<enemy_info>);
-	void load_map(MapObject_info **, MapObject_info **, std::vector<obstacle_info>, std::vector<item_info>, std::vector<enemy_info>, const char*);
+	void load_map(MapObject_info **, MapObject_info **, std::vector<obstacle_info>&, std::vector<item_info>&, std::vector<enemy_info>&, const char*);
 
 };
 

@@ -77,7 +77,7 @@ public:
 	void GDI_ShutDown();
 	void update();
 	void show();
-	void show_FPS(HDC hdc);
+	void show_FPS(HDC hdc, int a, int b);
 	//
 	void Load_Image();
 	//

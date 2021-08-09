@@ -82,7 +82,7 @@ void GameManager::show()
 	ScreenManager::getInstance().Screen();
 }
 
-void GameManager::show_FPS(HDC hdc)
+void GameManager::show_FPS(HDC hdc, int a, int b)
 {
 
 	TCHAR FPS[100];
@@ -96,7 +96,7 @@ void GameManager::show_FPS(HDC hdc)
 	_stprintf_s(FPS, _T("F P S : %lu"), num);
 
 
-	ScreenManager::getInstance().DoubleBufferingtext(hdc, FPS, 1, 1, 100, 20, 12, Color(255, 255, 255, 255),2);
+	ScreenManager::getInstance().DoubleBufferingtext(hdc, FPS, 1 + a, 1 + b, 100, 20, 12, Color(255, 255, 0, 255),2);
 	oldTime = newTime;
 }
 

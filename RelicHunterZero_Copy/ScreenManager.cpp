@@ -163,12 +163,12 @@ void ScreenManager::MainMenu()
 	}
 	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, 0);
 
+	GameManager::getInstance().show_FPS(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y);
 
 	BitBlt(hdc, 0, 0, bx, by, hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, SRCCOPY);
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteObject(hbitmap);
 	DeleteDC(hMemDC);
-	GameManager::getInstance().show_FPS(hdc);
 
 	ReleaseDC(g_hWnd, hdc);
 
@@ -369,7 +369,7 @@ void ScreenManager::char_sel()
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteObject(hbitmap);
 	DeleteDC(hMemDC);
-	GameManager::getInstance().show_FPS(hdc);
+	GameManager::getInstance().show_FPS(hdc, 0, 0);
 
 	ReleaseDC(g_hWnd, hdc);
 }

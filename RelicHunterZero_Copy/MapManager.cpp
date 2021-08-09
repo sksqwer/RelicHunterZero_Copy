@@ -91,13 +91,13 @@ void MapManager::TotalView()
 	ScreenManager::getInstance().SetCursor(hMemDC, 0, 0, 0);
 	MapCursor_temp(hMemDC);
 
+	GameManager::getInstance().show_FPS(hMemDC, 0, 0);
 
 	BitBlt(hdc, 0, 0, bx, by, hMemDC, 0, 0, SRCCOPY);
 
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteObject(hbitmap);
 	DeleteDC(hMemDC);
-	GameManager::getInstance().show_FPS(hdc);
 
 	if (Inputsystem::getInstance().key_Q)
 		(*mapobject_select).rotation -= 90;
@@ -1254,7 +1254,7 @@ void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Lay
 
 }
 
-void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Layer_2, std::vector<obstacle_info> Vobstacle, std::vector<item_info> Vitem, std::vector<enemy_info> Venemy, const char *cszFile)
+void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Layer_2, std::vector<obstacle_info> &_Vobstacle, std::vector<item_info> &_Vitem, std::vector<enemy_info> &_Venemy, const char *cszFile)
 {
 	std::ifstream fin;
 	fin.open(cszFile, std::ios::binary);
@@ -1276,9 +1276,9 @@ void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Lay
 			Map_Layer_2[i][j] = temp;
 		}
 
-	Vobstacle.clear();
-	Vitem.clear();
-	Venemy.clear();
+	_Vobstacle.clear();
+	_Vitem.clear();
+	_Venemy.clear();
 
 
 
@@ -1288,7 +1288,7 @@ void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Lay
 	for (int i = 0; i < n; i++)
 	{
 		fin.read((char *)&temp2, sizeof(obstacle_info));
-		Vobstacle.push_back(temp2);
+		_Vobstacle.push_back(temp2);
 	}
 
 	fin.read((char *)&n, sizeof(int));
@@ -1296,7 +1296,7 @@ void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Lay
 	for (int i = 0; i < n; i++)
 	{
 		fin.read((char *)&temp3, sizeof(item_info));
-		Vitem.push_back(temp3);
+		_Vitem.push_back(temp3);
 	}
 
 	fin.read((char *)&n, sizeof(int));
@@ -1304,7 +1304,7 @@ void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Lay
 	for (int i = 0; i < n; i++)
 	{
 		fin.read((char *)&temp4, sizeof(enemy_info));
-		Venemy.push_back(temp4);
+		_Venemy.push_back(temp4);
 	}
 
 	fin.close();
