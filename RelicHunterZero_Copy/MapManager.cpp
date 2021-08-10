@@ -381,10 +381,10 @@ void MapManager::SubView(HDC hdc)
 
 	const int button_num = 14;
 
-	//int coor[button_num][2] = { {1050, 700}, {1250, 700}, {1450, 700}, {1650, 700}, {1050, 800}, {1250, 800}, {1450, 800}, {1650, 800},
-	//					{1450, 900}, {1450, 1000},{1450, 1100}, {1650, 900}, {1650, 1000}, {1650, 1100} };
 	int coor[button_num][2] = { {1050, 700}, {1250, 700}, {1450, 700}, {1650, 700}, {1050, 800}, {1250, 800}, {1450, 800}, {1650, 800},
-					{1450, 900}, {1450, 950},{1450, 1000}, {1650, 900}, {1650, 950}, {1650, 1000} };
+						{1450, 900}, {1450, 1000},{1450, 1100}, {1650, 900}, {1650, 1000}, {1650, 1100} };
+	//int coor[button_num][2] = { {1050, 700}, {1250, 700}, {1450, 700}, {1650, 700}, {1050, 800}, {1250, 800}, {1450, 800}, {1650, 800},
+	//				{1450, 900}, {1450, 950},{1450, 1000}, {1650, 900}, {1650, 950}, {1650, 1000} };
 
 	TCHAR tstr[button_num][100] = { {L"Ship"}, {L"Desert"}, {L"Green"}, {L"Volcano"}, {L"Object_Obstacle"}, {L"Object_Item"}, {L"Object_Enemy"}, {L"Object_ETC"},
 	{L"ROAD"}, {L"BLOCK"},{L"SHADOW"}, {L"SAVE"}, {L"LOAD"}, {L"EXIT"} };
@@ -576,6 +576,7 @@ void MapManager::MapCursor_temp(HDC hdc)
 void MapManager::LoadTile(HDC hdc, MapObject_info *map, int i, int j, bool is_mapedit)
 {
 	Graphics g(hdc);
+
 	//if ((*map).row == -1)
 	//{
 	//	if ((*map).attr == MapObject_info::BLOCK)
@@ -588,6 +589,11 @@ void MapManager::LoadTile(HDC hdc, MapObject_info *map, int i, int j, bool is_ma
 
 
 	Image *temp = GameManager::getInstance().returnimagepointer((*map).col, (*map).row);
+
+	if (temp == nullptr)
+	{
+		int a = 0;
+	}
 
 	Matrix mat;
 	mat.RotateAt((*map).rotation % 360,
@@ -1215,7 +1221,7 @@ void MapManager::save_map()
 
 }
 
-void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Layer_2, std::vector<obstacle_info> Vobstacle, std::vector<item_info> Vitem, std::vector<enemy_info> Venemy)
+void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Layer_2, std::vector<obstacle_info> &Vobstacle, std::vector<item_info> &Vitem, std::vector<enemy_info> &Venemy)
 {
 	TCHAR path[100];
 	GetCurrentDirectory(100, path);
@@ -1230,7 +1236,7 @@ void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Lay
 
 	memset(&ofn, 0, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = NULL;
+	ofn.hwndOwner = g_hWnd;
 	ofn.lpstrFile = szFile;
 	ofn.lpstrFile[0] = '\0';
 	ofn.nMaxFile = str_len;

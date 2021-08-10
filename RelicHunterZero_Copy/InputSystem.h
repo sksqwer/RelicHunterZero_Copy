@@ -18,6 +18,7 @@ public:
 	bool mou_L = false;
 	bool mou_Wheel = false;
 	bool ESC = false;
+	bool Space = false;
 
 	//special
 	bool key_F1 = false;

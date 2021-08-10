@@ -162,6 +162,7 @@
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject_info.h" />
     <ClInclude Include="obstacle_info.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Record.h" />
     <ClInclude Include="RelicHunterZero_Copy.h" />
     <ClInclude Include="Resource.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="GM_Util.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="MapManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Record.cpp" />
     <ClCompile Include="RelicHunterZero_Copy.cpp" />
     <ClCompile Include="ScreenManager.cpp" />

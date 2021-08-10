@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "ScreenManager.h"
 #include "FileSystem.h"
+#include "GameScreen.h"
 
 void GameManager::Init()
 {
@@ -38,7 +39,15 @@ void GameManager::ShutDown()
 	shutdown_image_func(holo_Raff);
 	shutdown_image_func(Keytutorial);
 	shutdown_image_func(NPC_ass);
-
+	shutdown_image_func(Jimmy_idle);
+	shutdown_image_func(Jimmy_walk);
+	shutdown_image_func(Jimmy_dash);
+	shutdown_image_func(Jimmy_sprint);
+	shutdown_image_func(Jimmy_hit);
+	shutdown_image_func(Jimmy_death);
+	shutdown_image_func(Jimmy_teleportation_in);
+	shutdown_image_func(Jimmy_teleportation_out);
+	shutdown_image_func(effect_dash);
 
 
 	GDI_ShutDown();
@@ -68,6 +77,10 @@ void GameManager::update()
 	GetCursorPos(&mouse);
 
 	Inputsystem::getInstance().update();
+	if (Screen_flag == 7)
+	{
+		GameScreen::getInstance().update();
+	}
 }
 
 void GameManager::show()
@@ -137,6 +150,15 @@ void GameManager::Load_Image()
 	load_image_func(a++, 0, sizeof(holo_Raff) / sizeof(Image*), holo_Raff);
 	load_image_func(a++, 0, sizeof(Keytutorial) / sizeof(Image*), Keytutorial);
 	load_image_func(a++, 0, sizeof(NPC_ass) / sizeof(Image*), NPC_ass);
+	load_image_func(a++, 0, sizeof(Jimmy_idle) / sizeof(Image*), Jimmy_idle);
+	load_image_func(a++, 0, sizeof(Jimmy_walk) / sizeof(Image*), Jimmy_walk);
+	load_image_func(a++, 0, sizeof(Jimmy_dash) / sizeof(Image*), Jimmy_dash);
+	load_image_func(a++, 0, sizeof(Jimmy_sprint) / sizeof(Image*), Jimmy_sprint);
+	load_image_func(a++, 0, sizeof(Jimmy_hit) / sizeof(Image*), Jimmy_hit);
+	load_image_func(a++, 0, sizeof(Jimmy_death) / sizeof(Image*), Jimmy_death);
+	load_image_func(a++, 0, sizeof(Jimmy_teleportation_in) / sizeof(Image*), Jimmy_teleportation_in);
+	load_image_func(a++, 0, sizeof(Jimmy_teleportation_out) / sizeof(Image*), Jimmy_teleportation_out);
+	load_image_func(a++, 0, sizeof(effect_dash) / sizeof(Image*), effect_dash);
 
 
 }
@@ -168,6 +190,7 @@ void GameManager::shutdown_image_func(Image **img)
 
 Image * GameManager::returnimagepointer(int n, int m)
 {
+	int a = 0;
 	switch (n)
 	{
 	case 0:
@@ -236,6 +259,25 @@ Image * GameManager::returnimagepointer(int n, int m)
 		return (GameManager::getInstance().Keytutorial)[m];
 	case 32:
 		return (GameManager::getInstance().NPC_ass)[m];
+	case 33:
+		return (GameManager::getInstance().Jimmy_idle)[m];
+	case 34:
+		return (GameManager::getInstance().Jimmy_walk)[m];
+	case 35:
+		return (GameManager::getInstance().Jimmy_dash)[m];
+	case 36:
+		return (GameManager::getInstance().Jimmy_sprint)[m];
+	case 37:
+		return (GameManager::getInstance().Jimmy_hit)[m];
+	case 38:
+		return (GameManager::getInstance().Jimmy_death)[m];
+	case 39:
+		return (GameManager::getInstance().Jimmy_teleportation_in)[m];
+	case 40:
+		return (GameManager::getInstance().Jimmy_teleportation_out)[m];
+	case 41:
+		return (GameManager::getInstance().effect_dash)[m];
+
 
 
 	}

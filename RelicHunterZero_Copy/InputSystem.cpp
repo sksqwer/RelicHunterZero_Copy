@@ -3,10 +3,6 @@
 
 void Inputsystem::update()
 {
-	DWORD newTime = GetTickCount();
-	static DWORD oldTime = newTime;
-	if (newTime - oldTime < 45) return;
-	oldTime = newTime;
 
 	if (GetAsyncKeyState('W') & 0x8000)
 		key_W = true;
@@ -40,15 +36,24 @@ void Inputsystem::update()
 
 	if(GetAsyncKeyState(VK_RBUTTON) & 0x8000)
 		mou_R = true;
-		
-	if(GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-		mou_L = true;
 
 	if (GetAsyncKeyState(VK_MBUTTON) & 0x8000)
 		mou_Wheel = true;
 
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		ESC = true;
+
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+		Space = true;
+
+	DWORD newTime = GetTickCount();
+	static DWORD oldTime = newTime;
+	if (newTime - oldTime < 30) return;
+	oldTime = newTime;
+
+
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		mou_L = true;
 }
 
 void Inputsystem::reset()
@@ -67,4 +72,5 @@ void Inputsystem::reset()
 	mou_L = false;
 	mou_Wheel = false;
 	ESC = false;
+	Space = false;
 }

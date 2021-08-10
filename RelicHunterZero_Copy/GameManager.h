@@ -55,6 +55,15 @@ public:
 	Image *holo_Raff[27] = { nullptr };
 	Image *Keytutorial[26] = { nullptr };
 	Image *NPC_ass[10] = { nullptr };
+	Image *Jimmy_idle[12] = { nullptr };
+	Image *Jimmy_walk[6] = { nullptr };
+	Image *Jimmy_dash[3] = { nullptr };
+	Image *Jimmy_sprint[6] = { nullptr };
+	Image *Jimmy_hit[2] = { nullptr };
+	Image *Jimmy_death[11] = { nullptr };
+	Image *Jimmy_teleportation_in[8] = { nullptr };
+	Image *Jimmy_teleportation_out[8] = { nullptr };
+	Image *effect_dash[6] = { nullptr };
 	// objectvector
 
 
