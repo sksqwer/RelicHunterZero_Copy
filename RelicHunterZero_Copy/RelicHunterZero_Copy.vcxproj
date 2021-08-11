@@ -151,12 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="enemy_info.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GM_Util.h" />
+    <ClInclude Include="gun.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Item_info.h" />
     <ClInclude Include="MapManager.h" />
@@ -170,10 +172,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GM_Util.cpp" />
+    <ClCompile Include="gun.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -189,12 +193,8 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resource\sprite\crooshair\Black_cur32.cur" />
-    <None Include="resource\sprite\crooshair\Black_cur64.cur" />
-    <None Include="resource\sprite\crooshair\Black_cur48.cur" />
-    <None Include="resource\sprite\crooshair\Black_cur42.cur" />
-    <None Include="resource\sprite\crooshair\Black_cur128.cur" />
-    <None Include="resource\sprite\crooshair\Null_cur.cur" />
+    <None Include="cursor1.cur" />
+    <None Include="null.cur" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,10 +7,19 @@ void GameManager::Init()
 {
 	GDI_Init();
 	Load_Image();
+
+	cursor[0] = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur32.cur");
+	cursor[1] = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur42.cur");
+	cursor[2] = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur52.cur");
+	cursor[3] = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur62.cur");
+	cursor[4] = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur72.cur");
+	cursor[5] = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur82.cur");
+	cursor[6] = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur92.cur");
 }
 
 void GameManager::ShutDown()
 {
+	shutdown_image_func(cursor);
 	shutdown_image_func(menu);
 	shutdown_image_func(maptoggle);
 	shutdown_image_func(ship);
@@ -48,6 +57,7 @@ void GameManager::ShutDown()
 	shutdown_image_func(Jimmy_teleportation_in);
 	shutdown_image_func(Jimmy_teleportation_out);
 	shutdown_image_func(effect_dash);
+	shutdown_image_func(bullet);
 
 
 	GDI_ShutDown();
@@ -69,14 +79,16 @@ void GameManager::GDI_ShutDown()
 
 void GameManager::update()
 {
-	//	DWORD newTime = GetTickCount();
-	//	static DWORD oldTime = newTime;
-	//	if (newTime - oldTime < 30) return;
-	//	oldTime = newTime;
+	//DWORD newTime = GetTickCount();
+	//static DWORD oldTime = newTime;
+	//if (newTime - oldTime < 30) return;
+	//oldTime = newTime;
 
 	GetCursorPos(&mouse);
 
 	Inputsystem::getInstance().update();
+
+
 	if (Screen_flag == 7)
 	{
 		GameScreen::getInstance().update();
@@ -110,7 +122,7 @@ void GameManager::show_FPS(HDC hdc, int a, int b)
 
 
 	ScreenManager::getInstance().DoubleBufferingtext(hdc, FPS, 1 + a, 1 + b, 100, 20, 12, Color(255, 255, 0, 255),2);
-	oldTime = newTime;
+	oldTime = GetTickCount();
 }
 
 void GameManager::Load_Image()
@@ -159,7 +171,7 @@ void GameManager::Load_Image()
 	load_image_func(a++, 0, sizeof(Jimmy_teleportation_in) / sizeof(Image*), Jimmy_teleportation_in);
 	load_image_func(a++, 0, sizeof(Jimmy_teleportation_out) / sizeof(Image*), Jimmy_teleportation_out);
 	load_image_func(a++, 0, sizeof(effect_dash) / sizeof(Image*), effect_dash);
-
+	load_image_func(a++, 0, sizeof(bullet) / sizeof(Image*), bullet);
 
 }
 
@@ -277,6 +289,8 @@ Image * GameManager::returnimagepointer(int n, int m)
 		return (GameManager::getInstance().Jimmy_teleportation_out)[m];
 	case 41:
 		return (GameManager::getInstance().effect_dash)[m];
+	case 42:
+		return (GameManager::getInstance().bullet)[m];
 
 
 

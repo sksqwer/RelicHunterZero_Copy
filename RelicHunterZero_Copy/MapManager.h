@@ -11,10 +11,11 @@
 class MapManager
 {
 private:
-	const int mapsize = 50;
+	const int mapsize = 100;
 	const int totalviewsize = 5500;
 	POINT mappoint = { 0, 0 };
 	POINT submappoint = { 0, 0 };
+	POINT deletepoint = { -1, -1 };
 	MapObject_info **Map_Layer_1 = NULL;
 	MapObject_info **Map_Layer_2 = NULL;
 	MapObject_info ***submap;

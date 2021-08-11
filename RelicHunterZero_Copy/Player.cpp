@@ -1,6 +1,31 @@
 #include "Player.h"
 
 #include "InputSystem.h"
+#include "GM_Util.h"
+
+void Player::init()
+{
+	gun1 = new Gun;
+	curgun = gun1;
+
+	for (int i = 0; i < 100; i++)
+	{
+		Bullet *temp = new Bullet;
+		bullet_pool.push_back(temp);
+	}
+}
+
+void Player::shutdown()
+{
+	if (gun1)
+		delete gun1;
+	if (gun2)
+		delete gun2;
+	for (int i = 0; i < 100; i++)
+	{
+		delete bullet_pool[i];
+	}
+}
 
 void Player::setstate()
 {
@@ -114,4 +139,22 @@ void Player::update()
 	row %= maxframe;
 	if(pre != state)
 		setstate();
+
+	
+}
+
+void Player::shot_bullet(POINTF d, POINT c, POINT m)
+{
+	Bullet *temp = bullet_pool[cur];
+	temp->bulletmapoutpoint = m;
+	temp->cur = c;
+	temp->pre = c;
+	temp->dir = d;
+	temp->kind = curgun->bullet_type;
+	temp->set();
+	temp->gun_type = curgun->kind;
+	bullet_using.push_back(temp);
+
+	cur++;
+	cur %= bullet_pool_maxsize;
 }

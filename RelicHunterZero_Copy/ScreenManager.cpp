@@ -161,7 +161,7 @@ void ScreenManager::MainMenu()
 			exit(0);
 		}
 	}
-	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, 0);
+	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, 2);
 
 	GameManager::getInstance().show_FPS(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y);
 
@@ -362,7 +362,7 @@ void ScreenManager::char_sel()
 
 
 
-	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, 0);
+	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, 2);
 
 
 	BitBlt(hdc, 0, 0, bx, by, hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, SRCCOPY);
@@ -429,27 +429,36 @@ void ScreenManager::DoubleBufferingtext(HDC hdc, const TCHAR *str, int x, int y,
 
 }
 
-void ScreenManager::SetCursor(HDC hdc, int a, int b, int i) // a b : HDC - DC 크기 
+void ScreenManager::SetCursor(HDC hdc, int a, int b, int i = 2) // a b : HDC - DC 크기 
 {
 	POINT mouse = GameManager::getInstance().getmouse();
 	
 	Image *img;
 	switch (i)
 	{
+	case 0:
+		img = GameManager::getInstance().cursor[i];
+		break;
 	case 1:
-		img = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur32.png");
+		img = GameManager::getInstance().cursor[i];
 		break;
 	case 2:
-		img = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur52.png");
+		img = GameManager::getInstance().cursor[i];
 		break;
 	case 3:
-		img = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur72.png");
+		img = GameManager::getInstance().cursor[i];
 		break;
 	case 4:
-		img = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur92.png");
+		img = GameManager::getInstance().cursor[i];
+		break;
+	case 5:
+		img = GameManager::getInstance().cursor[i];
+		break;
+	case 6:
+		img = GameManager::getInstance().cursor[i];
 		break;
 	default:
-		img = Image::FromFile(L"Resource/Sprite/Crooshair/Original/Black_cur32.png");
+		img = GameManager::getInstance().cursor[2];
 		break;
 
 	}
@@ -457,11 +466,9 @@ void ScreenManager::SetCursor(HDC hdc, int a, int b, int i) // a b : HDC - DC 크
 	int x = img->GetWidth(), y = img->GetHeight();
 	Graphics g(hdc);
 	g.DrawImage(img,a + mouse.x - (x * 0.5),b + mouse.y - (y * 0.5), x, y);
+//	g.DrawImage(img,a + mouse.x,b + mouse.y, x, y);
 	g.SetSmoothingMode(SmoothingModeAntiAlias);
 	
-		delete img;
-
-
 
 }
 

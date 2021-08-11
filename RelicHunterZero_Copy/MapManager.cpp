@@ -88,7 +88,7 @@ void MapManager::TotalView()
 
 	SubView(hMemDC);
 
-	ScreenManager::getInstance().SetCursor(hMemDC, 0, 0, 0);
+	ScreenManager::getInstance().SetCursor(hMemDC, 0, 0, 2);
 	MapCursor_temp(hMemDC);
 
 	GameManager::getInstance().show_FPS(hMemDC, 0, 0);
@@ -302,6 +302,7 @@ void MapManager::MainView(HDC hdc)
 				{
 					Map_Layer_1[i][j].reset();
 					Map_Layer_2[i][j].reset();
+					deletepoint = {i , j };
 
 				}
 			}
@@ -310,6 +311,13 @@ void MapManager::MainView(HDC hdc)
 	//Obstacle
 	for (int i = 0; i < Vobstacle.size(); i++)
 	{
+		if (Vobstacle[i].pos.x == deletepoint.x && Vobstacle[i].pos.y == deletepoint.y)
+		{
+			Vobstacle.erase(Vobstacle.begin() + i);
+			i--;
+			continue;
+		}
+
 		obstacle_info *temp = &Vobstacle[i];
 		LoadTile(hMemDC, temp, 100 * ((*temp).pos.x - mappoint.x), 50 + 100 * ((*temp).pos.y - mappoint.y), true);
 	}
@@ -317,6 +325,12 @@ void MapManager::MainView(HDC hdc)
 	//item
 	for (int i = 0; i < Vitem.size(); i++)
 	{
+		if (Vitem[i].pos.x == deletepoint.x && Vitem[i].pos.y == deletepoint.y)
+		{
+			Vitem.erase(Vitem.begin() + i);
+			i--;
+			continue;
+		}
 		item_info *temp = &Vitem[i];
 		if(Map_Layer_1[(*temp).pos.x][(*temp).pos.y].on_obj == 1)
 			LoadTile(hMemDC, temp, 100 * ((*temp).pos.x - mappoint.x), 20 + 100 * ((*temp).pos.y - mappoint.y), true);
@@ -327,10 +341,18 @@ void MapManager::MainView(HDC hdc)
 	//enemy
 	for (int i = 0; i < Venemy.size(); i++)
 	{
+		if (Venemy[i].pos.x == deletepoint.x && Venemy[i].pos.y == deletepoint.y)
+		{
+			Venemy.erase(Venemy.begin() + i);
+			i--;
+			continue;
+		}
 		enemy_info *temp = &Venemy[i];
 		LoadTile(hMemDC, temp, 100 * ((*temp).pos.x - mappoint.x), 50 + 100 * ((*temp).pos.y - mappoint.y), true);
 
 	}
+
+	deletepoint = { -1, -1 };
 
 	if (Inputsystem::getInstance().key_W)
 	{
@@ -341,8 +363,8 @@ void MapManager::MainView(HDC hdc)
 	if (Inputsystem::getInstance().key_S)
 	{
 		mappoint.y++;
-		if (mappoint.y >= 40)
-			mappoint.y = 39;
+		if (mappoint.y >= 90)
+			mappoint.y = 89;
 	}
 	if (Inputsystem::getInstance().key_A)
 	{
@@ -353,8 +375,8 @@ void MapManager::MainView(HDC hdc)
 	if (Inputsystem::getInstance().key_D)
 	{
 		mappoint.x++;
-		if (mappoint.x >= 40)
-			mappoint.x = 39;
+		if (mappoint.x >= 90)
+			mappoint.x = 89;
 	}
 
 

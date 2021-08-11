@@ -22,6 +22,7 @@ private:
 	POINT mouse;
 public:
 	//Image
+	Image *cursor[7] = { nullptr };
 	Image *menu[6] = { nullptr };
 	Image *maptoggle[3] = { nullptr };
 	Image *ship[28] = { nullptr };
@@ -64,6 +65,7 @@ public:
 	Image *Jimmy_teleportation_in[8] = { nullptr };
 	Image *Jimmy_teleportation_out[8] = { nullptr };
 	Image *effect_dash[6] = { nullptr };
+	Image *bullet[6] = { nullptr };
 	// objectvector
 
 

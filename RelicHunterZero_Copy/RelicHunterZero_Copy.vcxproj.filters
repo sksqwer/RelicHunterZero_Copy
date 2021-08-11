@@ -69,6 +69,12 @@
     <ClInclude Include="Player.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="gun.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RelicHunterZero_Copy.cpp">
@@ -101,6 +107,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="gun.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RelicHunterZero_Copy.rc">
@@ -116,23 +128,11 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resource\sprite\crooshair\Black_cur128.cur">
+    <None Include="null.cur">
       <Filter>리소스 파일\Cursor</Filter>
     </None>
-    <None Include="resource\sprite\crooshair\Black_cur32.cur">
-      <Filter>리소스 파일\Cursor</Filter>
-    </None>
-    <None Include="resource\sprite\crooshair\Black_cur64.cur">
-      <Filter>리소스 파일\Cursor</Filter>
-    </None>
-    <None Include="resource\sprite\crooshair\Black_cur48.cur">
-      <Filter>리소스 파일\Cursor</Filter>
-    </None>
-    <None Include="resource\sprite\crooshair\Black_cur42.cur">
-      <Filter>리소스 파일\Cursor</Filter>
-    </None>
-    <None Include="resource\sprite\crooshair\Null_cur.cur">
-      <Filter>리소스 파일\Cursor</Filter>
+    <None Include="cursor1.cur">
+      <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>
 </Project>

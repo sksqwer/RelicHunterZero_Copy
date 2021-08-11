@@ -11,11 +11,14 @@ class GameScreen
 {
 public:
 	//variable
-	const int mapsize = 50;
+	const int mapsize = 100;
 	const char stage1[100] = "Resource/Save/stage1.txt";
 	int stage = 0;
+	int rotation = 0;
 	POINT mapoutpoint = {3, 3 };
 	POINT mapinpoint = { 200, 200 };
+	POINT premapoutpoint = { 3, 3 };
+	POINT premapinpoint = { 200, 200 };
 	POINT mouseinpoint = { 0, 0 };
 	Player *player = NULL;
 	// object
@@ -33,17 +36,21 @@ public:
 	//init
 	void init();
 	void shutdown();
-	void set_player();
 	//view
 	void TotalGameview();
 	void stage1MapView(HDC hdc);
 	void print_Player(HDC hdc);
+	void print_bullet(HDC hdc);
 	void print_Player_shadow(HDC hdc);
 	void load_Image(HDC hdc, Image *img, int a, int b, bool reverse);
 	void load_Image_shadow(HDC hdc, Image *img, int a, int b, bool reverse);
 
 	//update
 	void update();
+	void update_bullet();
+
+	//collide
+	void collide_player();
 
 	
 

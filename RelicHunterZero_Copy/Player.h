@@ -3,6 +3,8 @@
 #define _PLAYER_H_
 
 #include "framework.h"
+#include "gun.h"
+#include "bullet.h"
 
 class Player
 {
@@ -21,8 +23,22 @@ public:
 	int maxframe = 12;
 	int col = 33;
 	int row = 0;
+	//
+
+	Gun *curgun;
+	Gun *gun1, *gun2;
+	std::vector<Bullet *> bullet_pool;
+	std::vector<Bullet *> bullet_using;
+	int bullet_pool_maxsize = 100;
+	int cur = 0;
+	//function
+	void init();
+	void shutdown();
 	void setstate();
 	void update();
+	void shot_bullet(POINTF, POINT, POINT);
+	//
+
 
 
 
