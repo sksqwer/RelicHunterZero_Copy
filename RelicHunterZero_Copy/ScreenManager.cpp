@@ -161,7 +161,7 @@ void ScreenManager::MainMenu()
 			exit(0);
 		}
 	}
-	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, 2);
+	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, cursor);
 
 	GameManager::getInstance().show_FPS(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y);
 
@@ -362,7 +362,7 @@ void ScreenManager::char_sel()
 
 
 
-	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, 2);
+	SetCursor(hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, cursor);
 
 
 	BitBlt(hdc, 0, 0, bx, by, hMemDC, addsize - bg_tile_x, addsize - bg_tile_y, SRCCOPY);

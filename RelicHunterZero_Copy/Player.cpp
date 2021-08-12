@@ -143,13 +143,14 @@ void Player::update()
 	
 }
 
-void Player::shot_bullet(POINTF d, POINT c, POINT m)
+void Player::shot_bullet(POINTF d, POINT c, POINT outmap, int rotation)
 {
 	Bullet *temp = bullet_pool[cur];
-	temp->bulletmapoutpoint = m;
+	temp->bulletmapoutpoint = outmap;
 	temp->cur = c;
 	temp->pre = c;
 	temp->dir = d;
+	temp->rotation = rotation;
 	temp->kind = curgun->bullet_type;
 	temp->set();
 	temp->gun_type = curgun->kind;

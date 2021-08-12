@@ -12,7 +12,9 @@ class ScreenManager
 {
 private:
 	int bg_tile_x = 0, bg_tile_y = 0;
+	const int max_cursor = 6;
 public:
+	int cursor = 0;
 	//singleton
 	ScreenManager() {}
 	ScreenManager(const ScreenManager& ref) {}

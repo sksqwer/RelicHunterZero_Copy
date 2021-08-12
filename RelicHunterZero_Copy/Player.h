@@ -18,7 +18,7 @@ public:
 	int HP = 100;
 	int shield = 40;
 	int Stamina = 100;
-	int state = 0;
+	int state = IDLE;
 	int velocity = 10;
 	int maxframe = 12;
 	int col = 33;
@@ -36,7 +36,7 @@ public:
 	void shutdown();
 	void setstate();
 	void update();
-	void shot_bullet(POINTF, POINT, POINT);
+	void shot_bullet(POINTF, POINT, POINT, int);
 	//
 
 

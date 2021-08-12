@@ -48,6 +48,7 @@ public:
 	void MapCursor_temp(HDC hdc);
 	//
 	void LoadTile(HDC hdc, MapObject_info *map, int i, int j, bool is_mapedit);
+	void LoadTile(Graphics* g, MapObject_info *map, int i, int j, bool is_mapedit);
 	//set submap
 	void setship();
 	void setdesert();

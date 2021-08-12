@@ -6,7 +6,9 @@ class Gun
 {
 public:
 	enum { PISTOL, SMG, SHOTGUN , RIFLE , SNIPER , MACHINEGUN };
+	enum {IDLE = 100, SHOOT = 101};
 	int kind = PISTOL;
+	int state = IDLE;
 	int impact = 10;
 	int range = 800;
 	int rate = 300;

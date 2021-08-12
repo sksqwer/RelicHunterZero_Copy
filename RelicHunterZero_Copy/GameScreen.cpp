@@ -6,6 +6,12 @@
 
 void GameScreen::init()
 {
+	mapImage = new HBITMAP;
+	*mapImage = (HBITMAP)LoadImage(NULL, L"Resource/Save/stage1.png",
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+
+	mapImagepng = Gdiplus::Image::FromFile(L"Resource/Save/stage12.png");
+
 	Map_Layer_1 = new MapObject_info*[mapsize];
 	for (int i = 0; i < mapsize; i++)
 		Map_Layer_1[i] = new MapObject_info[mapsize];
@@ -39,6 +45,10 @@ void GameScreen::shutdown()
 	player->shutdown();
 	delete player;
 	player = NULL;
+	DeleteObject(mapImage);
+	delete mapImage;
+	delete mapImagepng;
+	
 }
 
 
@@ -55,56 +65,82 @@ void GameScreen::TotalGameview()
 	HBITMAP hbitmap = CreateCompatibleBitmap(hdc, bx, by);
 	HBITMAP hOldBitmap = (HBITMAP)SelectObject(hMemDC, hbitmap);
 
-	Gdiplus::Graphics g(hMemDC);
+	Gdiplus::Graphics *g = new Graphics(hMemDC);
 
 
 
-	stage1MapView(hMemDC);
+	stage1MapView(hMemDC, g);
 
 
 
-	print_Player(hMemDC); 
-	print_bullet(hMemDC);
-	print_Player_shadow(hMemDC);
+	print_Player(g); 
+	print_bullet(g);
+	print_Player_shadow(g);
 
 
-	if (Inputsystem::getInstance().mou_R)
+	if (Inputsystem::getInstance().mou_Wheel)
 		GameManager::getInstance().setScreenflag(1);
 
 	GameManager::getInstance().show_FPS(hMemDC, mapinpoint.x + mouseinpoint.x, mapinpoint.y + mouseinpoint.y);
 
-	ScreenManager::getInstance().SetCursor(hMemDC, mapinpoint.x, mapinpoint.y, 2);
+	ScreenManager::getInstance().SetCursor(hMemDC, mapinpoint.x, mapinpoint.y, ScreenManager::getInstance().cursor);
 
-	BitBlt(hdc, 0, 0, size.x, size.y, hMemDC, mapinpoint.x + mouseinpoint.x, mapinpoint.y + mouseinpoint.y, SRCCOPY);
+	if (Inputsystem::getInstance().mou_R)
+	{
+		TransparentBlt(hdc, 0, 0, size.x, size.y, hMemDC, mapinpoint.x + 104, mapinpoint.y + 94, size.x - 104, size.y - 94, SRCCOPY);
+	}
+	else
+	{
+		BitBlt(hdc, 0, 0, size.x, size.y, hMemDC, mapinpoint.x + mouseinpoint.x, mapinpoint.y + mouseinpoint.y, SRCCOPY);
+	}
 	//	BitBlt(hdc, 0, 0, size.x, size.y, hMemDC, mapinpoint.x, mapinpoint.y, SRCCOPY);
 	//	BitBlt(hdc, 0, 0, size.x, size.y, hMemDC, 0, 0, SRCCOPY);
 
 	SelectObject(hMemDC, hOldBitmap);
 	DeleteObject(hbitmap);
 	DeleteDC(hMemDC);
+	delete g;
 
 
 	ReleaseDC(g_hWnd, hdc);
 }
 
-void GameScreen::stage1MapView(HDC hdc)
+void GameScreen::mapImageview(HDC hdc, Graphics* g)
 {
-	for (int i = mapoutpoint.x; i < mapoutpoint.x + 23; i++)
-		for (int j = mapoutpoint.y; j < mapoutpoint.y + 15; j++)
-		{
-			if (Map_Layer_1[i][j].in_use)
-			{
-				MapManager::getInstance().LoadTile(hdc, &Map_Layer_1[i][j], 100 * (i - mapoutpoint.x), 100 * (j - mapoutpoint.y), false);
+	//HDC hmemDC = CreateCompatibleDC(hdc);
+	//HBITMAP oldbitmap = (HBITMAP)SelectObject(hmemDC, *mapImage);
 
-			}
-		}
+	//BitBlt(hdc, 0, 0, 2320, 1580, hmemDC, mapoutpoint.x, mapoutpoint.y, SRCCOPY);
+
+	//SelectObject(hmemDC, oldbitmap);
+
+	g->DrawImage(mapImagepng, 0, 0, mapoutpoint.x * 100, mapoutpoint.y * 100, 2300, 1500, UnitPixel);
+
+
+}
+
+void GameScreen::stage1MapView(HDC hdc, Graphics *g)
+{
+	//for (int i = mapoutpoint.x; i < mapoutpoint.x + 23; i++)
+	//	for (int j = mapoutpoint.y; j < mapoutpoint.y + 15; j++)
+	//	{
+	//		if (Map_Layer_1[i][j].in_use)
+	//		{
+	//			MapManager::getInstance().LoadTile(g, &Map_Layer_1[i][j], 100 * (i - mapoutpoint.x), 100 * (j - mapoutpoint.y), false);
+
+	//		}
+	//	}
+
+
+	//	mapImageview(hdc, g);
+
 
 	for (int i = mapoutpoint.x; i < mapoutpoint.x + 23; i++)
 		for (int j = mapoutpoint.y; j < mapoutpoint.y + 15; j++)
 		{
 			if (Map_Layer_2[i][j].in_use)
 			{
-				MapManager::getInstance().LoadTile(hdc, &Map_Layer_2[i][j], 100 * (i - mapoutpoint.x), 100 * (j - mapoutpoint.y), false);
+				MapManager::getInstance().LoadTile(g, &Map_Layer_2[i][j], 100 * (i - mapoutpoint.x), 100 * (j - mapoutpoint.y), false);
 
 			}
 		}
@@ -112,31 +148,43 @@ void GameScreen::stage1MapView(HDC hdc)
 	for (int i = 0; i < Vobstacle.size(); i++)
 	{
 		obstacle_info *temp = &Vobstacle[i];
-		MapManager::getInstance().LoadTile(hdc, temp, 100 * ((*temp).pos.x - mapoutpoint.x), 100 * ((*temp).pos.y - mapoutpoint.y), false);
+		if (mapoutpoint.x <= temp->pos.x && temp->pos.x < mapoutpoint.x + 23 &&
+			mapoutpoint.y <= temp->pos.y && temp->pos.y < mapoutpoint.y + 15)
+		{
+			MapManager::getInstance().LoadTile(g, temp, 100 * ((*temp).pos.x - mapoutpoint.x), 100 * ((*temp).pos.y - mapoutpoint.y), false);
+		}
 	}
 
 	//item
 	for (int i = 0; i < Vitem.size(); i++)
 	{
 		item_info *temp = &Vitem[i];
-		if (Map_Layer_1[(*temp).pos.x][(*temp).pos.y].on_obj == 1)
-			MapManager::getInstance().LoadTile(hdc, temp, 100 * ((*temp).pos.x - mapoutpoint.x), -25 + 100 * ((*temp).pos.y - mapoutpoint.y), false);
-		else
-			MapManager::getInstance().LoadTile(hdc, temp, 100 * ((*temp).pos.x - mapoutpoint.x), 100 * ((*temp).pos.y - mapoutpoint.y), false);
+
+		if (mapoutpoint.x <= temp->pos.x && temp->pos.x < mapoutpoint.x + 23 &&
+			mapoutpoint.y <= temp->pos.y && temp->pos.y < mapoutpoint.y + 15)
+		{
+			if (Map_Layer_1[(*temp).pos.x][(*temp).pos.y].on_obj == 1)
+				MapManager::getInstance().LoadTile(g, temp, 100 * ((*temp).pos.x - mapoutpoint.x), -25 + 100 * ((*temp).pos.y - mapoutpoint.y), false);
+			else
+				MapManager::getInstance().LoadTile(g, temp, 100 * ((*temp).pos.x - mapoutpoint.x), 100 * ((*temp).pos.y - mapoutpoint.y), false);
+		}
 	}
 
 	//enemy
 	for (int i = 0; i < Venemy.size(); i++)
 	{
 		enemy_info *temp = &Venemy[i];
-		MapManager::getInstance().LoadTile(hdc, temp, 100 * ((*temp).pos.x - mapoutpoint.x), 100 * ((*temp).pos.y - mapoutpoint.y), false);
+		if (mapoutpoint.x <= temp->pos.x && temp->pos.x < mapoutpoint.x + 23 &&
+			mapoutpoint.y <= temp->pos.y && temp->pos.y < mapoutpoint.y + 15)
+		{
+			MapManager::getInstance().LoadTile(g, temp, 100 * ((*temp).pos.x - mapoutpoint.x), 100 * ((*temp).pos.y - mapoutpoint.y), false);
+		}
 
 	}
 }
 
-void GameScreen::print_Player(HDC hdc)
+void GameScreen::print_Player(Graphics *g)
 {
-	Gdiplus::Graphics g(hdc);
 
 	Image *img = GameManager::getInstance().returnimagepointer(player->col, player->row);
 	POINT mouse = GameManager::getInstance().getmouse();
@@ -146,11 +194,11 @@ void GameScreen::print_Player(HDC hdc)
 
 	if (mouse.x - player->mappos.x > 0)
 	{
-		g.DrawImage(img, pos.X, pos.Y);
+		g->DrawImage(img, pos.X, pos.Y);
 	}
 	else
 	{
-		g.DrawImage(img, pos.X + img->GetWidth(), pos.Y, -1 * img->GetWidth(), img->GetHeight());
+		g->DrawImage(img, pos.X + img->GetWidth(), pos.Y, -1 * img->GetWidth(), img->GetHeight());
 	}
 
 	//state에 따른 이펙트
@@ -174,15 +222,15 @@ void GameScreen::print_Player(HDC hdc)
 
 		if (mouse.x - player->mappos.x > 0)
 		{
-			load_Image(hdc, GameManager::getInstance().returnimagepointer(41, dash_effect++), dash_start.X - mouseinpoint.x, dash_start.Y, false);
-			load_Image(hdc, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 74, mapinpoint.y + player->mappos.y - 47, false);
-			load_Image(hdc, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 94, mapinpoint.y + player->mappos.y - 47, false);
+			load_Image(g, GameManager::getInstance().returnimagepointer(41, dash_effect++), dash_start.X - mouseinpoint.x, dash_start.Y, false);
+			load_Image(g, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 74, mapinpoint.y + player->mappos.y - 47, false);
+			load_Image(g, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 94, mapinpoint.y + player->mappos.y - 47, false);
 		}
 		else
 		{
-			load_Image(hdc, GameManager::getInstance().returnimagepointer(41, dash_effect++), dash_start.X - mouseinpoint.x, dash_start.Y, true);
-			load_Image(hdc, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 20, mapinpoint.y + player->mappos.y - 47, true);
-			load_Image(hdc, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x, mapinpoint.y + player->mappos.y - 47, true);
+			load_Image(g, GameManager::getInstance().returnimagepointer(41, dash_effect++), dash_start.X - mouseinpoint.x, dash_start.Y, true);
+			load_Image(g, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 20, mapinpoint.y + player->mappos.y - 47, true);
+			load_Image(g, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x, mapinpoint.y + player->mappos.y - 47, true);
 		}
 	}
 	break;
@@ -193,61 +241,180 @@ void GameScreen::print_Player(HDC hdc)
 	Image *gunimg = GameManager::getInstance().returnimagepointer(player->curgun->col, player->curgun->row);
 	int gun_width = gunimg->GetWidth(), gun_height = gunimg->GetHeight();
 
-	
-
-	if (mouse.x > player->mappos.x)
+	if (player->curgun->state == Gun::IDLE)
 	{
+
 		rotation = angle(POINT({ player->mappos.x,  player->mappos.y }), { mouse.x, mouse.y });
+
+		mat.RotateAt(rotation % 360,
+			Gdiplus::PointF(pos.X + gun_width / 2,
+				pos.Y + 25 + gun_height / 2));
+		g->SetTransform(&mat);
+
+		if (mouse.x - player->mappos.x > 0)
+		{
+			g->DrawImage(gunimg, pos.X, pos.Y + 25);
+		}
+		else
+		{
+			g->DrawImage(gunimg,
+				pos.X, pos.Y + 25 + gun_height,
+				gun_width,
+				-1 * gun_height);
+		}
+		mat.RotateAt((360 - rotation) % 360,
+			Gdiplus::PointF(pos.X + gun_width / 2,
+				pos.Y + 25 + gun_height / 2));
+		g->SetTransform(&mat);
 	}
 	else
 	{
-		rotation = angle(POINT({ player->mappos.x,  player->mappos.y }), { mouse.x - 2 * (pos.X - player->mappos.x), mouse.y });
-	}
-//	rotation = angle(POINT({ player->mappos.x,  player->mappos.y }), { mouse.x, mouse.y });
+		static int rebound = 10;
 
-	mat.RotateAt(rotation % 360,
-		Gdiplus::PointF(pos.X + gun_width / 2,
-			pos.Y + 25 + gun_height / 2));
-	g.SetTransform(&mat);
+		if (rebound > 0)
+		{
+			rotation = angle(POINT({ player->mappos.x,  player->mappos.y }), { mouse.x, mouse.y });
 
-	if (mouse.x - player->mappos.x > 0)
-	{
-		g.DrawImage(gunimg, pos.X, pos.Y + 25);
+			float dis = get_distance(player->mappos, mouse);
+			POINTF dir = { float(((mouse.x - (player->mappos.x)) * rebound) / dis),
+						float(((mouse.y - (player->mappos.y)) * rebound) / dis) };
+
+			mat.RotateAt(rotation % 360,
+				Gdiplus::PointF(pos.X - dir.x +  gun_width / 2,
+					pos.Y + 25 - dir.y + + gun_height / 2));
+			g->SetTransform(&mat);
+
+			if (mouse.x - player->mappos.x > 0)
+			{
+				g->DrawImage(gunimg, pos.X - dir.x, pos.Y + 25 - dir.y);
+			}
+			else
+			{
+				g->DrawImage(gunimg,
+					INT(pos.X - dir.x), INT(pos.Y + 25 - dir.y + gun_height),
+					gun_width,
+					-1 * gun_height);
+			}
+			mat.RotateAt((360 - rotation) % 360,
+				Gdiplus::PointF(pos.X + gun_width / 2,
+					pos.Y + 25 + gun_height / 2));
+			g->SetTransform(&mat);
+			rebound -= 2;
+		}
+		else
+		{
+			rebound = 10;
+			player->curgun->state = Gun::IDLE;
+		}
 	}
-	else
+
+	//레이저 포인터
+	static bool mou_R_up = false;
+	if (Inputsystem::getInstance().mou_R)
 	{
-		g.DrawImage(gunimg,
-			pos.X, pos.Y + 25 + gun_height,
-			gun_width,
-			-1 * gun_height);
+
+		POINT gun_core_point = { player->mappos.x, player->mappos.y};
+		Point raiser_front_point = { player->mappos.x - 4, player->mappos.y + 24 };
+		Point raiser_end_point = { player->mappos.x - 4, player->mappos.y + 24 };
+		float dis = get_distance(gun_core_point, mouse);
+		int angle_rotation = angle(gun_core_point, mouse);
+
+
+
+		POINT cur = { gun_core_point.x, gun_core_point.y };
+		Point dir = { INT(float(((mouse.x - (raiser_front_point.X)) * player->curgun->range) / dis)),
+					INT(float(((mouse.y - (raiser_front_point.Y)) * player->curgun->range) / dis)) };
+		Point dir2 = { INT(float(((mouse.x - (raiser_front_point.X)) * 20) / dis)),
+					INT(float(((mouse.y - (raiser_front_point.Y)) * 20) / dis)) };
+
+		raiser_front_point = raiser_front_point + dir2 + mapinpoint;
+		raiser_end_point = raiser_end_point + dir + mapinpoint;
+
+		Pen redpen(Color(255, 0, 0), 3);
+
+		g->DrawLine(&redpen, raiser_front_point, raiser_end_point);
+		g->DrawEllipse(&redpen, Rect(raiser_end_point.X - 2, raiser_end_point.Y - 2, 4, 4));
+
+		if(player->state == Player::WALK)
+			player->velocity = 5;
+
+		ScreenManager::getInstance().cursor--;
+		if (ScreenManager::getInstance().cursor < 0)
+			ScreenManager::getInstance().cursor = 0;
+
+		mou_R_up = true;
+	}
+	else if(mou_R_up)
+	{
+		ScreenManager::getInstance().cursor = 2;
+		player->velocity = 10;
+		mou_R_up = false;
 	}
 
 }
 
-void GameScreen::print_bullet(HDC hdc)
+void GameScreen::print_bullet(Graphics* g)
 {
-	Gdiplus::Graphics g(hdc);
-	Image *img;GameManager::getInstance().returnimagepointer(player->col, player->row);
-	for (int i = 0; i < player->bullet_pool.size(); i++)
-	{
-		if (player->bullet_pool[i]->state == Bullet::SHOOT)
-		{
-			img = GameManager::getInstance().returnimagepointer(player->bullet_pool[i]->col, player->bullet_pool[i]->row);
+	
 
-			g.DrawImage(img, INT(player->bullet_pool[i]->cur.x - (img->GetWidth() * 0.5)) - (mapoutpoint.x - player->bullet_pool[i]->bulletmapoutpoint.x) * 100 ,
-				INT(player->bullet_pool[i]->cur.y - (img->GetHeight() * 0.5) - (mapoutpoint.y - player->bullet_pool[i]->bulletmapoutpoint.y) * 100));
+	Image *img;
+	GameManager::getInstance().returnimagepointer(player->col, player->row);
+	for (int i = 0; i < player->bullet_using.size(); i++)
+	{
+		if (player->bullet_using[i]->state == Bullet::START)
+		{
+			img = GameManager::getInstance().returnimagepointer(player->bullet_using[i]->col, player->bullet_using[i]->row);
+			Image *img2 = GameManager::getInstance().returnimagepointer(42, 5);
+			Matrix mat;
+
+
+			mat.RotateAt((player->bullet_using[i]->rotation) % 360,
+				Gdiplus::PointF(INT(player->bullet_using[i]->cur.x) - (mapoutpoint.x * 100),
+					INT(player->bullet_using[i]->cur.y - (mapoutpoint.y * 100))));
+			g->SetTransform(&mat);
+
+			g->DrawImage(img, INT(player->bullet_using[i]->cur.x) - (mapoutpoint.x * 100) - (img->GetWidth() * 0.5),
+				INT(player->bullet_using[i]->cur.y - (mapoutpoint.y * 100) - (img->GetHeight()* 0.5)));
+
+			g->DrawImage(img2, INT(player->bullet_using[i]->cur.x) - (mapoutpoint.x * 100) - (img->GetWidth() * 0.5),
+				INT(player->bullet_using[i]->cur.y - (mapoutpoint.y * 100) - (img->GetHeight()* 0.5)));
+
+
+			mat.RotateAt((360 - (player->bullet_using[i]->rotation)) % 360,
+				Gdiplus::PointF(INT(player->bullet_using[i]->cur.x) - (mapoutpoint.x * 100),
+					INT(player->bullet_using[i]->cur.y - (mapoutpoint.y * 100))));
+			g->SetTransform(&mat);
+			player->bullet_using[i]->state = Bullet::SHOOT;
+		}
+		else if(player->bullet_using[i]->state == Bullet::SHOOT)
+		{
+			img = GameManager::getInstance().returnimagepointer(player->bullet_using[i]->col, player->bullet_using[i]->row);
+			Matrix mat;
+
+			mat.RotateAt(((player->bullet_using[i]->rotation)) % 360,
+				Gdiplus::PointF(INT(player->bullet_using[i]->cur.x) - (mapoutpoint.x * 100),
+					INT(player->bullet_using[i]->cur.y - (mapoutpoint.y * 100))));
+			g->SetTransform(&mat);
+
+			g->DrawImage(img, INT(player->bullet_using[i]->cur.x) - (mapoutpoint.x * 100) - (img->GetWidth() * 0.5),
+				INT(player->bullet_using[i]->cur.y - (mapoutpoint.y * 100) - (img->GetHeight()* 0.5)));
+
+
+			mat.RotateAt((360 - (player->bullet_using[i]->rotation)) % 360,
+				Gdiplus::PointF(INT(player->bullet_using[i]->cur.x) - (mapoutpoint.x * 100),
+					INT(player->bullet_using[i]->cur.y - (mapoutpoint.y * 100))));
+			g->SetTransform(&mat);
 		}
 		else
 		{
-			player->bullet_pool.erase(player->bullet_pool.begin() + i);
+			player->bullet_pool.erase(player->bullet_using.begin() + i);
 			i--;
 		}
 	}
 }
 
-void GameScreen::print_Player_shadow(HDC hdc)
+void GameScreen::print_Player_shadow(Graphics* g)
 {
-	Gdiplus::Graphics g(hdc);
 
 	Image *img = GameManager::getInstance().returnimagepointer(player->col, player->row);
 	POINT mouse = GameManager::getInstance().getmouse();
@@ -265,7 +432,7 @@ void GameScreen::print_Player_shadow(HDC hdc)
 	ImageAttributes imageAtt;
 	imageAtt.SetColorMatrix(&colorMatrix, Gdiplus::ColorMatrixFlagsDefault, ColorAdjustTypeBitmap);
 
-	Point pos = { mapinpoint.x + player->mappos.x - 54, mapinpoint.y + player->mappos.y - 47 };
+	Point pos = { mapinpoint.x + player->mappos.x - 54, mapinpoint.y + player->mappos.y - 47 }; // 캐릭터의 중심
 
 
 	int width = img->GetWidth();
@@ -273,13 +440,13 @@ void GameScreen::print_Player_shadow(HDC hdc)
 
 	if (mouse.x - player->mappos.x > 0)
 	{
-		g.DrawImage(img, Rect(pos.X, pos.Y + 2 * height, width,  -1 * height),
+		g->DrawImage(img, Rect(pos.X, pos.Y + 2 * height, width,  -1 * height),
 			0, 0, width, height,
 		UnitPixel, &imageAtt);
 	}
 	else
 	{
-		g.DrawImage(img, Rect(pos.X + width, pos.Y + 2 * height, -1 * width, -1 * height),
+		g->DrawImage(img, Rect(pos.X + width, pos.Y + 2 * height, -1 * width, -1 * height),
 			0, 0, width, height,
 			UnitPixel, &imageAtt);
 	}
@@ -305,78 +472,110 @@ void GameScreen::print_Player_shadow(HDC hdc)
 
 		if (mouse.x - player->mappos.x > 0)
 		{
-			load_Image_shadow(hdc, GameManager::getInstance().returnimagepointer(41, dash_effect++), dash_start.X - mouseinpoint.x, dash_start.Y, false);
-			load_Image_shadow(hdc, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 74, mapinpoint.y + player->mappos.y - 47, false);
-			load_Image_shadow(hdc, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 94, mapinpoint.y + player->mappos.y - 47, false);
+			load_Image_shadow(g, GameManager::getInstance().returnimagepointer(41, dash_effect++), dash_start.X - mouseinpoint.x, dash_start.Y, false);
+			load_Image_shadow(g, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 74, mapinpoint.y + player->mappos.y - 47, false);
+			load_Image_shadow(g, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 94, mapinpoint.y + player->mappos.y - 47, false);
 		}
 		else
 		{
-			load_Image_shadow(hdc, GameManager::getInstance().returnimagepointer(41, dash_effect++), dash_start.X - mouseinpoint.x, dash_start.Y, true);
-			load_Image_shadow(hdc, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 20, mapinpoint.y + player->mappos.y - 47, true);
-			load_Image_shadow(hdc, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x, mapinpoint.y + player->mappos.y - 47, true);
+			load_Image_shadow(g, GameManager::getInstance().returnimagepointer(41, dash_effect++), dash_start.X - mouseinpoint.x, dash_start.Y, true);
+			load_Image_shadow(g, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x - 20, mapinpoint.y + player->mappos.y - 47, true);
+			load_Image_shadow(g, GameManager::getInstance().returnimagepointer(35, 0), mapinpoint.x + player->mappos.x, mapinpoint.y + player->mappos.y - 47, true);
 		}
 	}
 	break;
 	}
-	//bullet
 	//총 구현
 
 	Matrix mat;
 	Image *gunimg = GameManager::getInstance().returnimagepointer(player->curgun->col, player->curgun->row);
 	int gun_width = gunimg->GetWidth(), gun_height = gunimg->GetHeight();
 
-
-
-	if (mouse.x > player->mappos.x)
+	if (player->curgun->state == Gun::IDLE)
 	{
+
 		rotation = angle(POINT({ player->mappos.x,  player->mappos.y }), { mouse.x, mouse.y });
+
+		mat.RotateAt((360 - rotation) % 360,
+			Gdiplus::PointF(pos.X + gun_width / 2, pos.Y + 25 + gun_height));
+		g->SetTransform(&mat);
+
+		if (mouse.x - player->mappos.x < 0)
+		{
+			g->DrawImage(gunimg, Rect(pos.X, pos.Y - 25 + gun_height, gun_width, gun_height),
+				0, 0, gun_width, gun_height,
+				UnitPixel, &imageAtt);
+		}
+		else
+		{
+			g->DrawImage(gunimg, Rect(pos.X, pos.Y - 25 + 2 * gun_height, gun_width, -1 * gun_height),
+				0, 0, gun_width, gun_height,
+				UnitPixel, &imageAtt);
+		}
+
+		mat.RotateAt(rotation % 360,
+			Gdiplus::PointF(pos.X + gun_width / 2, pos.Y + 25 + gun_height));
+		g->SetTransform(&mat);
 	}
 	else
 	{
-		rotation = angle(POINT({ player->mappos.x,  player->mappos.y }), { mouse.x - 2 * (pos.X - player->mappos.x), mouse.y });
+		static int rebound = 10;
+
+		if (rebound > 0)
+		{
+			rotation = angle(POINT({ player->mappos.x,  player->mappos.y }), { mouse.x, mouse.y });
+
+			float dis = get_distance(player->mappos, mouse);
+			POINTF dir = { float(((mouse.x - (player->mappos.x)) * rebound) / dis),
+						float(((mouse.y - (player->mappos.y)) * rebound) / dis) };
+
+
+			mat.RotateAt((360 - rotation) % 360,
+				Gdiplus::PointF(pos.X - dir.x + gun_width / 2, pos.Y + dir.y + 25 + gun_height));
+			g->SetTransform(&mat);
+
+			if (mouse.x - player->mappos.x < 0)
+			{
+				g->DrawImage(gunimg, Rect(pos.X - dir.x, pos.Y - 25 + gun_height + dir.y, gun_width, gun_height),
+					0, 0, gun_width, gun_height,
+					UnitPixel, &imageAtt);
+			}
+			else
+			{
+				g->DrawImage(gunimg, Rect(pos.X - dir.x, pos.Y - 25 + 2 * gun_height + dir.y, gun_width, -1 * gun_height),
+					0, 0, gun_width, gun_height,
+					UnitPixel, &imageAtt);
+			}
+
+			mat.RotateAt(rotation % 360,
+				Gdiplus::PointF(pos.X + gun_width / 2, pos.Y + 25 + gun_height));
+			g->SetTransform(&mat);
+			rebound -= 2;
+		}
+		else
+		{
+			rebound = 10;
+			player->curgun->state = Gun::IDLE;
+		}
 	}
-	//	rotation = angle(POINT({ player->mappos.x,  player->mappos.y }), { mouse.x, mouse.y });
-
-	mat.RotateAt((360 - rotation) % 360,
-		Gdiplus::PointF(pos.X + gun_width / 2, pos.Y + 25 + gun_height));
-	g.SetTransform(&mat);
-
-	if (mouse.x - player->mappos.x < 0)
-	{
-		g.DrawImage(gunimg, Rect(pos.X, pos.Y - 25 +  gun_height, gun_width,  gun_height),
-			0, 0, gun_width, gun_height,
-			UnitPixel, &imageAtt);
-	}
-	else
-	{
-		g.DrawImage(gunimg, Rect(pos.X, pos.Y - 25 + 2 * gun_height, gun_width, -1 * gun_height),
-			0, 0, gun_width, gun_height,
-			UnitPixel, &imageAtt);
-	}
-
-
 }
 
-void GameScreen::load_Image(HDC hdc, Image *img, int a, int b, bool reverse)
+void GameScreen::load_Image(Graphics *g, Image *img, int a, int b, bool reverse)
 {
-	Gdiplus::Graphics g(hdc);
-	
-
 	if (reverse)
 	{
-		g.DrawImage(img, a + img->GetWidth(), b, -1 * img->GetWidth(), img->GetHeight());
+		g->DrawImage(img, a + img->GetWidth(), b, -1 * img->GetWidth(), img->GetHeight());
 
 	}
 	else
 	{
-		g.DrawImage(img, a, b);
+		g->DrawImage(img, a, b);
 
 	}
 }
 
-void GameScreen::load_Image_shadow(HDC hdc, Image * img, int a, int b, bool reverse)
+void GameScreen::load_Image_shadow(Graphics *g, Image * img, int a, int b, bool reverse)
 {
-	Gdiplus::Graphics g(hdc);
 	REAL rTransparency = 0.5f;
 
 	ColorMatrix colorMatrix =
@@ -394,14 +593,14 @@ void GameScreen::load_Image_shadow(HDC hdc, Image * img, int a, int b, bool reve
 	int height = img->GetHeight();
 	if (reverse)
 	{
-		g.DrawImage(img, Rect(a + width, b + 2 * height, -1 * width, -1 * height),
+		g->DrawImage(img, Rect(a + width, b + 2 * height, -1 * width, -1 * height),
 			0, 0, width, height,
 			UnitPixel, &imageAtt);
 
 	}
 	else
 	{
-		g.DrawImage(img, Rect(a, b + 2 * height, width, -1 * height),
+		g->DrawImage(img, Rect(a, b + 2 * height, width, -1 * height),
 			0, 0, width, height,
 			UnitPixel, &imageAtt);
 
@@ -411,6 +610,7 @@ void GameScreen::load_Image_shadow(HDC hdc, Image * img, int a, int b, bool reve
 void GameScreen::update()
 {
 	int velocity = player->velocity;
+//	int velocity = 100;
 	premapinpoint = mapinpoint;
 	premapoutpoint = mapoutpoint;
 	if (Inputsystem::getInstance().key_W)
@@ -520,15 +720,33 @@ void GameScreen::update()
 		{
 			shooting_oldTime = newTime;
 
+			player->curgun->state = Gun::SHOOT;
+
 			RECT rt;
 			GetClientRect(g_hWnd, &rt);
 
-			POINTF dir = { float((mouse.x - 960) * player->curgun->bullet_speed) / float(get_distance(player->mappos,mouse)),
-						float((mouse.y - 590) * player->curgun->bullet_speed) / float(get_distance(player->mappos,mouse)) };
 			// dir 계산
-			POINT cur = { mapinpoint.x + player->mappos.x, mapinpoint.y + player->mappos.y };
+			POINT gun_core_point = { player->mappos.x - 4, player->mappos.y + 28 };
+			POINT gun_front_point = { player->mappos.x + 16, player->mappos.y + 28 };
+			float dis = get_distance(gun_core_point, mouse);
+			int angle_rotation = angle(gun_core_point, mouse);
 
-			player->shot_bullet(dir, cur, mapoutpoint);
+			
+
+			POINT cur = { gun_core_point.x, gun_core_point.y };
+			POINTF dir = { float(((mouse.x - (gun_core_point.x)) * player->curgun->bullet_speed) / dis),
+						float(((mouse.y - (gun_core_point.y)) * player->curgun->bullet_speed) / dis) };
+			POINTF dir2 = { float(((mouse.x - (gun_core_point.x)) * 60) / dis),
+						float(((mouse.y - (gun_core_point.y)) * 60) / dis) };
+			cur.x += dir2.x;
+			cur.y += dir2.y;
+			cur.x += mapinpoint.x;
+			cur.y += mapinpoint.y;
+			cur.x += mapoutpoint.x * 100;
+			cur.y += mapoutpoint.y * 100;
+			rotate_dot(gun_core_point, cur, angle_rotation);
+
+			player->shot_bullet(dir, cur, mapoutpoint, angle_rotation);
 		}
 	}
 

@@ -41,13 +41,33 @@ POINT rotate_dot(POINT core, POINT b, int rotation)
 	float l = get_distance(core, b);
 
 	float radian = rotation * M_PI / 180;
-	temp.x = l * cos(radian);
-	temp.y = l * sin(radian);
-	temp.x = b.x * cos(radian) - b.y * sin(radian);
-	temp.y = b.x * cos(radian) + b.y * sin(radian);
+	temp.x = core.x + l * cos(radian);
+	temp.y = core.y + l * sin(radian);
+//	temp.x = b.x * cos(radian) - b.y * sin(radian);
+//	temp.y = b.x * cos(radian) + b.y * sin(radian);
 
 	return temp;
 
 }
+
+POINT& operator+(const POINT a, const POINT b)
+{
+	POINT temp = { a.x + b.x, a.y + b.y };
+	return temp;
+}
+
+Point & operator+(const Point a, const POINT b)
+{
+	Point temp = { a.X + b.x, a.Y + b.y };
+	return temp;
+}
+
+Point & operator+(const POINT a, const Point b)
+{
+	Point temp = { a.x + b.X, a.y + b.Y };
+	return temp;
+}
+
+
 
 

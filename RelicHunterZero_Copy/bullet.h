@@ -10,8 +10,8 @@ public:
 	bool in_use = false;
 	enum {LIGHT, NORMAL, HEAVY, SNIPER, ENEMY, 
 	//state
-			SHOOT, DESTROY};
-	int state = SHOOT;
+			START, SHOOT, DESTROY};
+	int state = START;
 	POINT bulletmapoutpoint = { 0,0 };
 	POINT cur = { 0,0 };
 	POINT pre = { 0,0 };

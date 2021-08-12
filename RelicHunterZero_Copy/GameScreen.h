@@ -17,11 +17,13 @@ public:
 	int rotation = 0;
 	POINT mapoutpoint = {3, 3 };
 	POINT mapinpoint = { 200, 200 };
-	POINT premapoutpoint = { 3, 3 };
+	POINT premapoutpoint = { 2, 2 };
 	POINT premapinpoint = { 200, 200 };
 	POINT mouseinpoint = { 0, 0 };
 	Player *player = NULL;
 	// object
+	HBITMAP *mapImage;
+	Image *mapImagepng;
 	MapObject_info **Map_Layer_1 = NULL;
 	MapObject_info **Map_Layer_2 = NULL;
 	std::vector<obstacle_info> Vobstacle;
@@ -38,12 +40,13 @@ public:
 	void shutdown();
 	//view
 	void TotalGameview();
-	void stage1MapView(HDC hdc);
-	void print_Player(HDC hdc);
-	void print_bullet(HDC hdc);
-	void print_Player_shadow(HDC hdc);
-	void load_Image(HDC hdc, Image *img, int a, int b, bool reverse);
-	void load_Image_shadow(HDC hdc, Image *img, int a, int b, bool reverse);
+	void mapImageview(HDC hdc, Graphics* g);
+	void stage1MapView(HDC hdc, Graphics* g);
+	void print_Player(Graphics* g);
+	void print_bullet(Graphics* g);
+	void print_Player_shadow(Graphics* g);
+	void load_Image(Graphics* g, Image *img, int a, int b, bool reverse);
+	void load_Image_shadow(Graphics* g, Image *img, int a, int b, bool reverse);
 
 	//update
 	void update();

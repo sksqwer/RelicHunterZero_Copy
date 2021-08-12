@@ -79,10 +79,10 @@ void GameManager::GDI_ShutDown()
 
 void GameManager::update()
 {
-	//DWORD newTime = GetTickCount();
-	//static DWORD oldTime = newTime;
-	//if (newTime - oldTime < 30) return;
-	//oldTime = newTime;
+	/*DWORD newTime = GetTickCount();
+	static DWORD oldTime = newTime;
+	if (newTime - oldTime < 500) return;
+	oldTime = newTime;*/
 
 	GetCursorPos(&mouse);
 

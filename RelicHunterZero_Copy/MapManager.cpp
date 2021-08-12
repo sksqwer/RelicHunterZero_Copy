@@ -6,6 +6,8 @@
 #include "framework.h"
 #include <time.h>
 
+
+void Encoding(CLSID* clsid);
 int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
 
 void MapManager::Edit_init()
@@ -403,10 +405,10 @@ void MapManager::SubView(HDC hdc)
 
 	const int button_num = 14;
 
+//	int coor[button_num][2] = { {1050, 700}, {1250, 700}, {1450, 700}, {1650, 700}, {1050, 800}, {1250, 800}, {1450, 800}, {1650, 800},
+//						{1450, 900}, {1450, 1000},{1450, 1100}, {1650, 900}, {1650, 1000}, {1650, 1100} };
 	int coor[button_num][2] = { {1050, 700}, {1250, 700}, {1450, 700}, {1650, 700}, {1050, 800}, {1250, 800}, {1450, 800}, {1650, 800},
-						{1450, 900}, {1450, 1000},{1450, 1100}, {1650, 900}, {1650, 1000}, {1650, 1100} };
-	//int coor[button_num][2] = { {1050, 700}, {1250, 700}, {1450, 700}, {1650, 700}, {1050, 800}, {1250, 800}, {1450, 800}, {1650, 800},
-	//				{1450, 900}, {1450, 950},{1450, 1000}, {1650, 900}, {1650, 950}, {1650, 1000} };
+					{1450, 900}, {1450, 950},{1450, 1000}, {1650, 900}, {1650, 950}, {1650, 1000} };
 
 	TCHAR tstr[button_num][100] = { {L"Ship"}, {L"Desert"}, {L"Green"}, {L"Volcano"}, {L"Object_Obstacle"}, {L"Object_Item"}, {L"Object_Enemy"}, {L"Object_ETC"},
 	{L"ROAD"}, {L"BLOCK"},{L"SHADOW"}, {L"SAVE"}, {L"LOAD"}, {L"EXIT"} };
@@ -647,6 +649,46 @@ void MapManager::LoadTile(HDC hdc, MapObject_info *map, int i, int j, bool is_ma
 		g.DrawRectangle(&redpen, Rect(i, j, 100, 100));
 	}
 
+}
+
+void MapManager::LoadTile(Graphics* g, MapObject_info * map, int i, int j, bool is_mapedit)
+{
+	Image *temp = GameManager::getInstance().returnimagepointer((*map).col, (*map).row);
+
+	if (temp == nullptr)
+	{
+		int a = 0;
+	}
+
+	Matrix mat;
+	mat.RotateAt((*map).rotation % 360,
+		Gdiplus::PointF(i + temp->GetWidth() / 2,
+			j + temp->GetHeight() / 2));
+
+	g->SetTransform(&mat);
+
+	Rect rect(i, j - (temp->GetHeight() - 100), temp->GetWidth(), temp->GetHeight());
+	g->DrawImage(temp, rect,
+		0, 0,
+		temp->GetWidth(), temp->GetHeight(), UnitPixel);
+
+	if ((*map).is_ani)
+	{
+		//		static int frame = 0;
+		//		frame %= 2;
+		if (1)
+		{
+			(*map).row++;
+			(*map).row %= (*map).max_frame;
+		}
+		//		frame++;
+	}
+
+	if (is_mapedit && (*map).attr == MapObject_info::BLOCK)
+	{
+		Pen redpen(Color(255, 255, 0, 0), 5);
+		g->DrawRectangle(&redpen, Rect(i, j, 100, 100));
+	}
 }
 
 
@@ -1168,78 +1210,46 @@ void MapManager::save_map()
 	}
 	SetCurrentDirectory(path);
 
-//	Bitmap *map_Bitmap;
-//	map_Bitmap = new Bitmap(mapsize * 100, mapsize * 100, PixelFormat32bppARGB);
+	//맵 이미지 파일 전체 저장
 
-//	Gdiplus::Graphics g(map_Bitmap);
+	HDC savehdc, hdc;
+	hdc = GetDC(g_hWnd);
+	savehdc = CreateCompatibleDC(hdc);
+	HBITMAP hbitmap, oldbitmap;
+	hbitmap = CreateCompatibleBitmap(hdc, mapsize * 100, mapsize * 100);
+	oldbitmap = (HBITMAP)SelectObject(savehdc, hbitmap);
 
+	SetBkColor(savehdc, RGB(255, 255, 255));
+	ReleaseDC(g_hWnd, hdc);
 
-	/*for (int i = 0; i < mapsize; i++)
-		for (int j = 0; j < mapsize; j++)
-		{
-			if (Map_Layer_1[i][j].in_use)
-			{
-				Matrix mat;
-				mat.RotateAt(Map_Layer_1[i][j].rotation % 360,
-					Gdiplus::PointF(i + 50,
-						j + 50));
-
-				g.SetTransform(&mat);
-				Image *temp = GameManager::getInstance().returnimagepointer(Map_Layer_1[i][j].col, Map_Layer_1[i][j].row);
-
-				Rect rect(i, j - (temp->GetHeight() - 100), temp->GetWidth(), temp->GetHeight());
-				g.DrawImage(temp, rect,
-					0, 0,
-					temp->GetWidth(), temp->GetHeight(), UnitPixel);
-			}
-			else
-			{
-				Image bg(L"{garbage/null.png}");
-
-				Rect rect(i, j, bg.GetWidth(), bg.GetHeight());
-				g.DrawImage(&bg, rect,
-					0, 0,
-					bg.GetWidth(), bg.GetHeight(), UnitPixel);
-			}
-
-		}
-
+	Graphics g(savehdc);
 
 	for (int i = 0; i < mapsize; i++)
 		for (int j = 0; j < mapsize; j++)
 		{
-			if (Map_Layer_2[i][j].in_use)
+			if (Map_Layer_1[i][j].in_use)
 			{
-				Matrix mat;
-				mat.RotateAt(Map_Layer_1[i][j].rotation % 360,
-					Gdiplus::PointF(i + 50,
-						j + 50));
-				Image *temp = GameManager::getInstance().returnimagepointer(Map_Layer_2[i][j].col, Map_Layer_2[i][j].row);
-
-				Rect rect(i, j - (temp->GetHeight() - 100), temp->GetWidth(), temp->GetHeight());
-				g.DrawImage(temp, rect,
-					0, 0,
-					temp->GetWidth(), temp->GetHeight(), UnitPixel);
-
+				LoadTile(savehdc, &Map_Layer_1[i][j], i * 100, j * 100, false);
 			}
-		}*/
-//
-//	
-//	CLSID   pngClsid;
-////	CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &encoderClsid);
-//	GetEncoderClsid(L"{garbage/menubg.png}", &pngClsid);
-//
-//	TCHAR save[200];
-//	_stprintf_s(save, _T("%s/Resource/mapImage/%s.png"), path, szFile);
-//	Status  stat;
-//	stat = map_Bitmap->Save(save, &pngClsid, NULL);
-//
-//	if (stat == Ok)
-//	{
-//		exit(0);
-//	}
-//
-//	delete map_Bitmap;
+		}
+
+	CLSID clsid; //clsid
+	Gdiplus::Bitmap* bit = new Gdiplus::Bitmap(500, 500); //내용이없는 빈 500x500의 비트맵객체생성
+	Encoding(&clsid); //clsid에다가 jpeg에 대한 인코딩정보 넣기
+	bit = bit->FromHBITMAP(hbitmap, 0); //hbitmap내용을 통하여 bit라는 비트맵객체에 값대입
+
+	TCHAR save[200];
+	int len = strlen(cszFile) + strlen(".png");
+	_stprintf_s(save, _T("%s.png"), szFile);
+	save[len] = NULL;
+	Status  stat;
+	stat = bit->Save(save, &clsid); //파일로 저장
+
+	delete bit;
+	SelectObject(savehdc, oldbitmap);
+	DeleteObject(hbitmap);
+	DeleteDC(savehdc);
+
 
 }
 
@@ -1367,4 +1377,32 @@ int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
 
 	free(pImageCodecInfo);
 	return -1;  // Failure
+}
+
+void Encoding(CLSID* clsid) {
+	UINT num, size;
+	Gdiplus::GetImageEncodersSize(&num, &size); //인코더크기구하기
+	Gdiplus::ImageCodecInfo* codec = new Gdiplus::ImageCodecInfo[size]; //특정크기만큼 코덱객체 동적할당
+	Gdiplus::GetImageEncoders(num, size, codec); //이미지인코딩정보 구하기
+
+	for (int i = 0; i < num; i++) { //for문으로 순회하면서
+
+	/*
+
+	[ 존재하는 이미지포맷 형식 ]
+	image/bmp
+	image/jpeg
+	image/gif
+	image/tiff
+	image/png
+
+	*/
+
+		if (!wcscmp(L"image/png", codec[i].MimeType)) { //만약 jpeg형식 포맷형식이 있다면
+			*clsid = codec[i].Clsid; //그때의 clsid값을 대입하고
+			break; //for문 나가기(값을 찾았으니까)
+		}
+	}
+
+	delete[] codec; //메모리누수방지
 }
