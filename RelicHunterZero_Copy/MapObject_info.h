@@ -4,6 +4,9 @@
 
 #include "framework.h"
 
+class obstacle_ingame;
+class enemy_ingame;
+class item_ingame;
 
 class MapObject_info
 {
@@ -30,11 +33,34 @@ public:
 		max_frame = 1;
 		on_obj = 0;
 		pos = { 0, 0 };
+		object_type = 0;
 		col = 0;
 		row = 0;
 		rotation = 0;
 		attr = 10;
 	}
+};
+
+class MapObject_ingame : public MapObject_info
+{
+public:
+	obstacle_ingame *obs = NULL;
+	item_ingame *item = NULL;
+	enemy_ingame *enemy = NULL;
+
+	void reset()
+	{
+		is_ani = false;
+		max_frame = 1;
+		on_obj = 0;
+		object_type = 0;
+		attr = 10;
+		obs = NULL;
+		item = NULL;
+		enemy = NULL;
+	}
+	//function
+	MapObject_ingame& operator=(const MapObject_info& mapobj);
 };
 
 

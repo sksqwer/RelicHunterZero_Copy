@@ -17,4 +17,14 @@ public:
 	int framelimit = 0;
 };
 
+class obstacle_ingame : public obstacle_info
+{
+public:
+	POINT center = { 50, 50 };
+	POINT size = { 100, 100 };
+	int HP = 100;
+	//function
+	obstacle_ingame& operator=(const obstacle_info& mapobj);
+};
+
 #endif // !_OBSTACLE_H_

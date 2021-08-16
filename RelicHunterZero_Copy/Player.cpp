@@ -1,17 +1,26 @@
 #include "Player.h"
 
 #include "InputSystem.h"
+#include "gun.h"
+#include "casing.h"
+#include "bullet.h"
 #include "GM_Util.h"
 
 void Player::init()
 {
 	gun1 = new Gun;
+	gun2 = new Gun;
 	curgun = gun1;
 
 	for (int i = 0; i < 100; i++)
 	{
 		Bullet *temp = new Bullet;
 		bullet_pool.push_back(temp);
+	}
+	for (int i = 0; i < 100; i++)
+	{
+		Casing *temp = new Casing;
+		casing_pool.push_back(temp);
 	}
 }
 
@@ -24,6 +33,10 @@ void Player::shutdown()
 	for (int i = 0; i < 100; i++)
 	{
 		delete bullet_pool[i];
+	}
+	for (int i = 0; i < 100; i++)
+	{
+		delete casing_pool[i];
 	}
 }
 
@@ -89,7 +102,10 @@ void Player::update()
 			return;
 		}
 	}
-	
+	static DWORD dash_oldTime = GetTickCount();
+
+
+
 	if (Inputsystem::getInstance().key_S || Inputsystem::getInstance().key_A || Inputsystem::getInstance().key_W || Inputsystem::getInstance().key_D)
 	{
 		state = WALK;
@@ -107,7 +123,6 @@ void Player::update()
 		else if (Inputsystem::getInstance().key_SHIFT)
 		{
 			DWORD newTime = GetTickCount();
-			static DWORD dash_oldTime = newTime;
 			if (newTime - dash_oldTime >= 1000)
 			{
 				if (Stamina >= 50)
@@ -127,6 +142,22 @@ void Player::update()
 			if (Stamina > 100)
 				Stamina = 100;
 		}
+	}
+	else if (Inputsystem::getInstance().key_SHIFT)
+	{
+		DWORD newTime = GetTickCount();
+		if (newTime - dash_oldTime >= 1000)
+		{
+			if (Stamina >= 50)
+			{
+				dash_count = 0;
+				state = DASH;
+				velocity = 50;
+				Stamina -= 50;
+				dash_oldTime = newTime;
+			}
+		}
+
 	}
 	else
 	{
@@ -152,9 +183,17 @@ void Player::shot_bullet(POINTF d, POINT c, POINT outmap, int rotation)
 	temp->dir = d;
 	temp->rotation = rotation;
 	temp->kind = curgun->bullet_type;
+	temp->bullet_speed = curgun->bullet_speed;
 	temp->set();
 	temp->gun_type = curgun->kind;
 	bullet_using.push_back(temp);
+}
+
+void Player::shot_casing(POINTF p, POINTF d, int pz, int mpz, int t)
+{
+	Casing *temp = casing_pool[cur];
+	temp->set(p, d, pz, mpz, t);
+	casing_using.push_back(temp);
 
 	cur++;
 	cur %= bullet_pool_maxsize;

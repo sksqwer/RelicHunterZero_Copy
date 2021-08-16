@@ -58,6 +58,18 @@ void GameManager::ShutDown()
 	shutdown_image_func(Jimmy_teleportation_out);
 	shutdown_image_func(effect_dash);
 	shutdown_image_func(bullet);
+	shutdown_image_func(bullet_effect_light);
+	shutdown_image_func(bullet_effect_medium);
+	shutdown_image_func(bullet_effect_heavy);
+	shutdown_image_func(prompt_e);
+	shutdown_image_func(granade);
+	shutdown_image_func(health);
+	shutdown_image_func(health_big);
+	shutdown_image_func(heavy_ammo);
+	shutdown_image_func(medum_ammo);
+	shutdown_image_func(light_ammo);
+	shutdown_image_func(shield);
+	shutdown_image_func(casing);
 
 
 	GDI_ShutDown();
@@ -172,7 +184,18 @@ void GameManager::Load_Image()
 	load_image_func(a++, 0, sizeof(Jimmy_teleportation_out) / sizeof(Image*), Jimmy_teleportation_out);
 	load_image_func(a++, 0, sizeof(effect_dash) / sizeof(Image*), effect_dash);
 	load_image_func(a++, 0, sizeof(bullet) / sizeof(Image*), bullet);
-
+	load_image_func(a++, 0, sizeof(bullet_effect_light) / sizeof(Image*), bullet_effect_light);
+	load_image_func(a++, 0, sizeof(bullet_effect_medium) / sizeof(Image*), bullet_effect_medium);
+	load_image_func(a++, 0, sizeof(bullet_effect_heavy) / sizeof(Image*), bullet_effect_heavy);
+	load_image_func(a++, 0, sizeof(prompt_e) / sizeof(Image*), prompt_e);
+	load_image_func(a++, 0, sizeof(granade) / sizeof(Image*), granade);
+	load_image_func(a++, 0, sizeof(health) / sizeof(Image*), health);
+	load_image_func(a++, 0, sizeof(health_big) / sizeof(Image*), health_big);
+	load_image_func(a++, 0, sizeof(heavy_ammo) / sizeof(Image*), heavy_ammo);
+	load_image_func(a++, 0, sizeof(medum_ammo) / sizeof(Image*), medum_ammo);
+	load_image_func(a++, 0, sizeof(light_ammo) / sizeof(Image*), light_ammo);
+	load_image_func(a++, 0, sizeof(shield) / sizeof(Image*), shield);
+	load_image_func(a++, 0, sizeof(casing) / sizeof(Image*), casing);
 }
 
 void GameManager::load_image_func(const int CSVrow, const int CSVcol, const int filenum, Image **img)
@@ -291,7 +314,30 @@ Image * GameManager::returnimagepointer(int n, int m)
 		return (GameManager::getInstance().effect_dash)[m];
 	case 42:
 		return (GameManager::getInstance().bullet)[m];
-
+	case 43:
+		return (GameManager::getInstance().bullet_effect_light)[m];
+	case 44:
+		return (GameManager::getInstance().bullet_effect_medium)[m];
+	case 45:
+		return (GameManager::getInstance().bullet_effect_heavy)[m];
+	case 46:
+		return (GameManager::getInstance().prompt_e)[m];
+	case 47:
+		return (GameManager::getInstance().granade)[m];
+	case 48:
+		return (GameManager::getInstance().health)[m];
+	case 49:
+		return (GameManager::getInstance().health_big)[m];
+	case 50:
+		return (GameManager::getInstance().heavy_ammo)[m];
+	case 51:
+		return (GameManager::getInstance().medum_ammo)[m];
+	case 52:
+		return (GameManager::getInstance().light_ammo)[m];
+	case 53:
+		return (GameManager::getInstance().shield)[m];
+	case 54:
+		return (GameManager::getInstance().casing)[m];
 
 
 	}

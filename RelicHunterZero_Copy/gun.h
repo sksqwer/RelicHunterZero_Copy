@@ -10,7 +10,7 @@ public:
 	int kind = PISTOL;
 	int state = IDLE;
 	int impact = 10;
-	int range = 800;
+	int range = 500;
 	int rate = 300;
 	int bullet_speed = 100;
 	int maxbullet = 30;
@@ -22,6 +22,7 @@ public:
 	int row = 0;
 	//
 	void set_gun();
+	int ret_bullet_type();
 
 
 };

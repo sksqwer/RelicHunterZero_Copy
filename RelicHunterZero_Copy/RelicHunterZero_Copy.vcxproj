@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="casing.h" />
     <ClInclude Include="enemy_info.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="framework.h" />
@@ -173,13 +174,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="casing.cpp" />
+    <ClCompile Include="enemy_info.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GM_Util.cpp" />
     <ClCompile Include="gun.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Item_info.cpp" />
     <ClCompile Include="MapManager.cpp" />
+    <ClCompile Include="MapObject_info.cpp" />
+    <ClCompile Include="obstacle_info.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Record.cpp" />
     <ClCompile Include="RelicHunterZero_Copy.cpp" />

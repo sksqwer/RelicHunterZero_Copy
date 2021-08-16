@@ -26,6 +26,13 @@ float get_distance(POINT a, POINT b)
 	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
 }
 
+float get_distance(POINT a, POINTF b)
+{
+	if (a.x == b.x && a.y == b.y)
+		return 0.001;
+	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
+}
+
 float angle(POINT a, POINT b)
 {
 	float dis = get_distance(a, b);
@@ -48,6 +55,22 @@ POINT rotate_dot(POINT core, POINT b, int rotation)
 
 	return temp;
 
+}
+
+POINTF rotate_dot(POINT core, POINTF b, int rotation)
+{
+	POINTF temp;
+	float l = get_distance(core, b);
+
+	float radian = rotation * M_PI / 180;
+	//temp.x = core.x + l * cos(radian);
+	//temp.y = core.y + l * sin(radian);
+	temp.x = (b.x - core.x) * cos(radian) - (b.y - core.y)* sin(radian);
+	temp.y = (b.x - core.x) * sin(radian) + (b.y - core.y) * cos(radian);
+	temp.x += core.x;
+	temp.y += core.y;
+
+	return temp;
 }
 
 POINT& operator+(const POINT a, const POINT b)

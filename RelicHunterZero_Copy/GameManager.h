@@ -66,6 +66,18 @@ public:
 	Image *Jimmy_teleportation_out[8] = { nullptr };
 	Image *effect_dash[6] = { nullptr };
 	Image *bullet[6] = { nullptr };
+	Image *bullet_effect_light[3] = { nullptr };
+	Image *bullet_effect_medium[3] = { nullptr };
+	Image *bullet_effect_heavy[3] = { nullptr };
+	Image *prompt_e[8] = { nullptr };
+	Image *granade[17] = { nullptr };
+	Image *health[2] = { nullptr };
+	Image *health_big[2] = { nullptr };
+	Image *heavy_ammo[16] = { nullptr };
+	Image *medum_ammo[16] = { nullptr };
+	Image *light_ammo[16] = { nullptr };
+	Image *shield[2] = { nullptr };
+	Image *casing[4] = { nullptr };
 	// objectvector
 
 

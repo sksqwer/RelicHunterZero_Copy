@@ -1,5 +1,6 @@
 #include "MapManager.h"
 #include "GameManager.h"
+#include "MapObject_info.h"
 #include "obstacle_info.h"
 #include "Item_info.h"
 #include "enemy_info.h"
@@ -214,11 +215,23 @@ void MapManager::MainView(HDC hdc)
 						else if(Map_Layer_1[i][j].on_obj == 1)
 						{
 							item_info *temp = static_cast<item_info *>(mapobject_select);
-							Map_Layer_1[i][j].on_obj = 1;
-							(*temp).pos = { i,j };
+							bool _use = true;
+							for (int i = 0; i < Vitem.size(); i++)
+							{
+								if (temp->pos.x == Vitem[i].pos.x && temp->pos.y == Vitem[i].pos.y)
+								{
+									_use = true;
+								}
+							}
+							if (_use)
+							{
+								Map_Layer_1[i][j].on_obj = 1;
+								(*temp).pos = { i,j };
 
-							Vitem.push_back(*temp);
+								Vitem.push_back(*temp);
+							}
 						}
+
 						
 
 					}
@@ -657,7 +670,6 @@ void MapManager::LoadTile(Graphics* g, MapObject_info * map, int i, int j, bool 
 
 	if (temp == nullptr)
 	{
-		int a = 0;
 	}
 
 	Matrix mat;
@@ -667,7 +679,17 @@ void MapManager::LoadTile(Graphics* g, MapObject_info * map, int i, int j, bool 
 
 	g->SetTransform(&mat);
 
-	Rect rect(i, j - (temp->GetHeight() - 100), temp->GetWidth(), temp->GetHeight());
+	Rect rect;
+	if (temp->GetWidth() < 100)
+	{
+		rect = { int(i - int((int(temp->GetWidth() - 100)) * 0.5)), int(j - int((int(temp->GetHeight() - 100)) * 0.5)),
+			int(temp->GetWidth()),int(temp->GetHeight()) };
+//		rect = { INT(i - (temp->GetWidth() - 100)), INT(j - (temp->GetHeight() - 100) * 0.5), INT(temp->GetWidth()),INT(temp->GetHeight()) };
+
+	}
+	else
+		rect = { i, int(j - (temp->GetHeight() - 100)), int(temp->GetWidth()), int(temp->GetHeight()) };
+
 	g->DrawImage(temp, rect,
 		0, 0,
 		temp->GetWidth(), temp->GetHeight(), UnitPixel);
@@ -1343,6 +1365,67 @@ void MapManager::load_map(MapObject_info **Map_Layer_1, MapObject_info **Map_Lay
 	{
 		fin.read((char *)&temp4, sizeof(enemy_info));
 		_Venemy.push_back(temp4);
+	}
+
+	fin.close();
+}
+
+void MapManager::load_map(MapObject_ingame **Map_Layer_1, MapObject_ingame **Map_Layer_2, std::vector<obstacle_ingame>&_Vobstacle, std::vector<item_ingame>&_Vitem, std::vector<enemy_ingame>&_Venemy, const char *cszFile)
+{
+	std::ifstream fin;
+	fin.open(cszFile, std::ios::binary);
+
+	MapObject_info temp;
+	for (int i = 0; i < mapsize; i++)
+		for (int j = 0; j < mapsize; j++)
+		{
+			fin.read((char *)&temp, sizeof(MapObject_info));
+			Map_Layer_1[i][j] = temp;
+		}
+
+
+	for (int i = 0; i < mapsize; i++)
+		for (int j = 0; j < mapsize; j++)
+		{
+			fin.read((char *)&temp, sizeof(MapObject_info));
+			Map_Layer_2[i][j] = temp;
+		}
+
+	_Vobstacle.clear();
+	_Vitem.clear();
+	_Venemy.clear();
+
+
+
+	int n;
+	fin.read((char *)&n, sizeof(int));
+	obstacle_info temp2;
+	obstacle_ingame temp2_;
+	for (int i = 0; i < n; i++)
+	{
+		fin.read((char *)&temp2, sizeof(obstacle_info));
+		temp2_ = temp2;
+		_Vobstacle.push_back(temp2_);
+	}
+
+	fin.read((char *)&n, sizeof(int));
+	item_info temp3;
+	item_ingame temp3_;
+	for (int i = 0; i < n; i++)
+	{
+		fin.read((char *)&temp3, sizeof(item_info));
+		temp3_ = temp3;
+		_Vitem.push_back(temp3_);
+	}
+
+	fin.read((char *)&n, sizeof(int));
+	enemy_info temp4;
+	enemy_ingame temp4_;
+	for (int i = 0; i < n; i++)
+	{
+		fin.read((char *)&temp4, sizeof(enemy_info));
+		temp4_ = temp4;
+		_Venemy.push_back(temp4_);
 	}
 
 	fin.close();

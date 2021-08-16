@@ -3,8 +3,9 @@
 #define _PLAYER_H_
 
 #include "framework.h"
-#include "gun.h"
-#include "bullet.h"
+class Gun;
+class Bullet;
+class Casing;
 
 class Player
 {
@@ -15,10 +16,19 @@ public:
 	int maxhp = 100;
 	int maxshield = 40;
 	int maxstamina = 100;
-	int HP = 100;
-	int shield = 40;
+	int HP = 50;
+	int shield = 20;
 	int Stamina = 100;
 	int state = IDLE;
+	//ammo
+	int light_ammo = 100;
+	int ammo_max = 1000;
+	int medium_ammo = 0;
+	int heavy_ammo = 0;
+	int grenade = 3;
+	int grenade_max = 5;
+
+	//
 	int velocity = 10;
 	int maxframe = 12;
 	int col = 33;
@@ -29,6 +39,8 @@ public:
 	Gun *gun1, *gun2;
 	std::vector<Bullet *> bullet_pool;
 	std::vector<Bullet *> bullet_using;
+	std::vector<Casing *> casing_pool;
+	std::vector<Casing *> casing_using;
 	int bullet_pool_maxsize = 100;
 	int cur = 0;
 	//function
@@ -37,6 +49,7 @@ public:
 	void setstate();
 	void update();
 	void shot_bullet(POINTF, POINT, POINT, int);
+	void shot_casing(POINTF p, POINTF d, int pz, int mpz, int t);
 	//
 
 

@@ -17,5 +17,15 @@ public:
 	int framelimit = 0;
 };
 
+class enemy_ingame : public enemy_info
+{
+public:
+	POINT center = { 50, 50 };
+	POINT size = { 100, 100 };
+	int HP = 100;
+
+	//function
+	enemy_ingame& operator=(const enemy_info& mapobj);
+};
 
 #endif // !_ENEMY_INFO_H_

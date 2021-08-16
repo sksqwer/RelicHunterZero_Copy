@@ -19,6 +19,8 @@ public:
 	int kind = 0;
 	int gun_type = 0;
 	const int col = 42;
+	int bullet_effect_col = 43;
+	int bullet_speed = 50;
 	int row = 0;
 	int rotation = 0;
 	void set();
