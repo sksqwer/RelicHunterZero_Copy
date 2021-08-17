@@ -767,7 +767,7 @@ void GameScreen::load_Image_shadow(Graphics *g, Image * img, int a, int b, bool 
 
 void GameScreen::view_item_use(Graphics * g)
 {
-	const POINT enum_pos[5] = { {0, -1}, {-1, 0}, {0, 0}, {1, 0}, {0, 1}, };
+	const POINT enum_pos[5] = { {0, 0}, {0, -1}, {-1, 0}, {1, 0}, {0, 1}, };
 	static int prompt_e_row = 0;
 	static int Layer_row = 0;
 	static int Layer_col = 0;
