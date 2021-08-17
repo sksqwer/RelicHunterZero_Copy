@@ -2,6 +2,8 @@
 
 void Bullet::set()
 {
+	bullet_effect_row = 0;
+	state = START;
 	switch (kind)
 	{
 		//LIGHT, NORMAL, HEAVY, SNIPER, ENEMY };

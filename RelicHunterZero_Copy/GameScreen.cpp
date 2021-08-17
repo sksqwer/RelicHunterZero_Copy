@@ -496,11 +496,9 @@ void GameScreen::print_bullet(Graphics* g)
 		}
 		else
 		{
-			static int bullet_effect_row = 0;
-
-			if (bullet_effect_row < 3)
+			if (player->bullet_using[i]->bullet_effect_row < 3)
 			{
-				img = GameManager::getInstance().returnimagepointer(player->bullet_using[i]->bullet_effect_col, bullet_effect_row++);
+				img = GameManager::getInstance().returnimagepointer(player->bullet_using[i]->bullet_effect_col, player->bullet_using[i]->bullet_effect_row++);
 				Matrix mat;
 
 				mat.RotateAt(((player->bullet_using[i]->rotation)) % 360,
@@ -519,9 +517,9 @@ void GameScreen::print_bullet(Graphics* g)
 			}
 			else
 			{
+				player->bullet_using[i]->bullet_effect_row = 0;
 				player->bullet_using.erase(player->bullet_using.begin() + i);
 				i--;
-				bullet_effect_row = 0;
 			}
 
 		}
